@@ -283,6 +283,313 @@
             margin-top: 40px;
         }
 
+        /* DAILY COMMAND CENTER */
+        .command-center {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 40px;
+            background: #2b2b2b;
+            border: 1px solid #454545;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .command-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #f5f5f5;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #00d4ff;
+        }
+
+        /* TASKS SECTION */
+        .tasks-container {
+            margin-bottom: 20px;
+        }
+
+        .task-input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .task-input-group input {
+            flex: 1;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            color: #f5f5f5;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .task-input-group input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: #252525;
+        }
+
+        .task-input-group button {
+            background: #00d4ff;
+            color: #000;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .task-input-group button:hover {
+            background: #00b8d4;
+        }
+
+        .tasks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .task-item input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+        }
+
+        .task-text {
+            flex: 1;
+            font-size: 13px;
+            color: #a8a8a8;
+        }
+
+        .task-item input[type="checkbox"]:checked + .task-text {
+            text-decoration: line-through;
+            color: #686868;
+        }
+
+        .task-delete {
+            background: #454545;
+            border: none;
+            color: #a8a8a8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.3s;
+        }
+
+        .task-delete:hover {
+            background: #ff5555;
+            color: #fff;
+        }
+
+        .empty-message {
+            font-size: 12px;
+            color: #686868;
+            text-align: center;
+            padding: 15px;
+            font-style: italic;
+        }
+
+        /* NOTES SECTION */
+        .notes-container {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #3a3a3a;
+        }
+
+        .notes-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .notes-input-group textarea {
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            color: #f5f5f5;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            min-height: 60px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .notes-input-group textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: #252525;
+        }
+
+        .notes-button-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .notes-button-group button {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .notes-add {
+            background: #00d4ff;
+            color: #000;
+        }
+
+        .notes-add:hover {
+            background: #00b8d4;
+        }
+
+        .notes-clear {
+            background: #454545;
+            color: #a8a8a8;
+        }
+
+        .notes-clear:hover {
+            background: #555555;
+        }
+
+        .notes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .note-item {
+            padding: 10px 12px;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #a8a8a8;
+            line-height: 1.4;
+        }
+
+        /* MINI CALENDAR */
+        .mini-calendar {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-header h3 {
+            margin: 0;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 5px;
+        }
+
+        .calendar-nav button {
+            background: #454545;
+            border: none;
+            color: #a8a8a8;
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .calendar-nav button:hover {
+            background: #00d4ff;
+            color: #000;
+        }
+
+        .calendar-month {
+            font-size: 13px;
+            font-weight: 600;
+            color: #f5f5f5;
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .calendar-weekday {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: #686868;
+            padding: 5px 0;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #3a3a3a;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #a8a8a8;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .calendar-day:hover {
+            border-color: #00d4ff;
+            background: #252525;
+        }
+
+        .calendar-day.other-month {
+            color: #454545;
+        }
+
+        .calendar-day.today {
+            background: #00d4ff;
+            color: #000;
+            font-weight: 600;
+            border-color: #00d4ff;
+        }
+
+        .calendar-day.has-activity {
+            border-color: #00d4ff;
+            background: #1a3a3a;
+        }
+
         @media (max-width: 900px) {
             .grid {
                 grid-template-columns: 1fr;
@@ -293,6 +600,10 @@
             }
 
             .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .command-center {
                 grid-template-columns: 1fr;
             }
         }
@@ -339,6 +650,65 @@
             <a href="metrics_dashboard.html" class="action-btn">📊 Register Metrics</a>
             <a href="journal_system.html" class="action-btn">📝 Daily Journal</a>
             <a href="calendar_dashboard.html" class="action-btn">📅 View Calendar</a>
+        </div>
+
+        <!-- DAILY COMMAND CENTER -->
+        <div class="command-center">
+            <!-- LEFT: Tasks & Notes -->
+            <div>
+                <!-- TASKS -->
+                <div class="command-section">
+                    <h3>✅ Today's Tasks</h3>
+                    <div class="tasks-container">
+                        <div class="task-input-group">
+                            <input type="text" id="taskInput" placeholder="Add a task...">
+                            <button onclick="addTask()">Add</button>
+                        </div>
+                        <div class="tasks-list" id="tasksList"></div>
+                    </div>
+                </div>
+
+                <!-- NOTES -->
+                <div class="command-section">
+                    <h3>📝 Daily Notes</h3>
+                    <div class="notes-container">
+                        <div class="notes-input-group">
+                            <textarea id="noteInput" placeholder="Quick notes, reminders, ideas..."></textarea>
+                            <div class="notes-button-group">
+                                <button class="notes-add" onclick="addNote()">+ Add Note</button>
+                                <button class="notes-clear" onclick="clearNotes()">Clear All</button>
+                            </div>
+                        </div>
+                        <div class="notes-list" id="notesList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Mini Calendar -->
+            <div class="mini-calendar">
+                <div class="command-section">
+                    <div class="calendar-header">
+                        <div>
+                            <div class="calendar-month" id="calendarMonth"></div>
+                        </div>
+                        <div class="calendar-nav">
+                            <button onclick="prevMonth()">←</button>
+                            <button onclick="todayMonth()">Today</button>
+                            <button onclick="nextMonth()">→</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="calendar-weekdays">
+                    <div class="calendar-weekday">Sun</div>
+                    <div class="calendar-weekday">Mon</div>
+                    <div class="calendar-weekday">Tue</div>
+                    <div class="calendar-weekday">Wed</div>
+                    <div class="calendar-weekday">Thu</div>
+                    <div class="calendar-weekday">Fri</div>
+                    <div class="calendar-weekday">Sat</div>
+                </div>
+                <div class="calendar-days" id="calendarDays"></div>
+            </div>
         </div>
 
         <!-- MAIN TOOLS -->
@@ -548,6 +918,13 @@
     </div>
 
     <script>
+        // Google Sheets Auto-Sync
+        const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz1Vf-wO7x6dZkO6jmKbb-0EptIks5phXg_7vaTplJ2DPwPMGtxnvH9i6FehDm5h3KF3w/exec';
+        function syncToGoogleSheets(toolName, data) {
+            const payload = { tool: toolName, timestamp: new Date().toISOString(), data: data };
+            fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: JSON.stringify(payload) }).catch(e => console.log('Sync:', e));
+        }
+
         // Update time every second
         function updateTime() {
             const now = new Date();
@@ -593,12 +970,225 @@
             document.getElementById('totalEntries').textContent = metricsData.length;
         }
 
+        // ========== DAILY COMMAND CENTER ==========
+
+        let currentCalendarDate = new Date();
+
+        // Add Task
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const taskText = input.value.trim();
+            if (!taskText) return;
+
+            let tasks = JSON.parse(localStorage.getItem('daily_tasks') || '[]');
+            tasks.push({
+                id: Date.now(),
+                text: taskText,
+                completed: false,
+                createdDate: new Date().toISOString().split('T')[0],
+                completedDate: null
+            });
+            localStorage.setItem('daily_tasks', JSON.stringify(tasks));
+            input.value = '';
+            renderTasks();
+            syncToGoogleSheets('Daily Tasks', { action: 'add', task: taskText });
+        }
+
+        // Delete Task
+        function deleteTask(id) {
+            let tasks = JSON.parse(localStorage.getItem('daily_tasks') || '[]');
+            tasks = tasks.filter(t => t.id !== id);
+            localStorage.setItem('daily_tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        // Toggle Task
+        function toggleTask(id) {
+            let tasks = JSON.parse(localStorage.getItem('daily_tasks') || '[]');
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                if (task.completed) {
+                    task.completedDate = new Date().toISOString().split('T')[0];
+                }
+                localStorage.setItem('daily_tasks', JSON.stringify(tasks));
+                renderTasks();
+                if (task.completed) {
+                    syncToGoogleSheets('Daily Tasks', { action: 'completed', task: task.text, completedDate: task.completedDate });
+                }
+            }
+        }
+
+        // Render Tasks
+        function renderTasks() {
+            let tasks = JSON.parse(localStorage.getItem('daily_tasks') || '[]');
+            const today = new Date().toISOString().split('T')[0];
+
+            // Filter out strikethrough tasks from yesterday (auto-clear at midnight)
+            tasks = tasks.filter(t => {
+                if (t.completed && t.completedDate && t.completedDate !== today) {
+                    // This is an old strikethrough task from yesterday, remove it
+                    return false;
+                }
+                return true;
+            });
+            localStorage.setItem('daily_tasks', JSON.stringify(tasks));
+
+            const tasksList = document.getElementById('tasksList');
+            if (tasks.length === 0) {
+                tasksList.innerHTML = '<div class="empty-message">No tasks yet. Add one to get started!</div>';
+                return;
+            }
+
+            tasksList.innerHTML = tasks.map(task => `
+                <div class="task-item">
+                    <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${task.id})">
+                    <span class="task-text">${task.text}</span>
+                    <button class="task-delete" onclick="deleteTask(${task.id})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        // Add Note
+        function addNote() {
+            const input = document.getElementById('noteInput');
+            const noteText = input.value.trim();
+            if (!noteText) return;
+
+            let notes = JSON.parse(localStorage.getItem('daily_notes') || '[]');
+            notes.push({
+                id: Date.now(),
+                text: noteText,
+                createdDate: new Date().toISOString().split('T')[0]
+            });
+            localStorage.setItem('daily_notes', JSON.stringify(notes));
+            input.value = '';
+            renderNotes();
+            syncToGoogleSheets('Daily Notes', { action: 'add', note: noteText });
+        }
+
+        // Clear All Notes
+        function clearNotes() {
+            if (confirm('Clear all notes for today? (They will be archived)')) {
+                let notes = JSON.parse(localStorage.getItem('daily_notes') || '[]');
+                const today = new Date().toISOString().split('T')[0];
+                const archivedNotes = notes.map(n => ({ ...n, clearedDate: today }));
+
+                localStorage.setItem('daily_notes', '[]');
+                renderNotes();
+
+                // Sync to Google Sheets
+                syncToGoogleSheets('Daily Notes', {
+                    action: 'clear_all',
+                    notesCount: notes.length,
+                    clearedDate: today,
+                    notes: archivedNotes
+                });
+            }
+        }
+
+        // Render Notes
+        function renderNotes() {
+            let notes = JSON.parse(localStorage.getItem('daily_notes') || '[]');
+            const notesList = document.getElementById('notesList');
+
+            if (notes.length === 0) {
+                notesList.innerHTML = '<div class="empty-message">No notes yet. Add one to get started!</div>';
+                return;
+            }
+
+            notesList.innerHTML = notes.map(note => `
+                <div class="note-item">${note.text}</div>
+            `).join('');
+        }
+
+        // Render Calendar
+        function renderCalendar() {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            // Set month title
+            document.getElementById('calendarMonth').textContent =
+                currentCalendarDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+            // Get first day of month and number of days
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            let days = [];
+
+            // Previous month's days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                days.push({ day: daysInPrevMonth - i, otherMonth: true });
+            }
+
+            // Current month's days
+            for (let i = 1; i <= daysInMonth; i++) {
+                days.push({ day: i, otherMonth: false });
+            }
+
+            // Next month's days
+            const remaining = 42 - days.length;
+            for (let i = 1; i <= remaining; i++) {
+                days.push({ day: i, otherMonth: true });
+            }
+
+            const today = new Date();
+            const tasks = JSON.parse(localStorage.getItem('daily_tasks') || '[]');
+            const notes = JSON.parse(localStorage.getItem('daily_notes') || '[]');
+
+            const calendarDays = document.getElementById('calendarDays');
+            calendarDays.innerHTML = days.map((d, idx) => {
+                const isToday = !d.otherMonth && d.day === today.getDate() &&
+                               month === today.getMonth() && year === today.getFullYear();
+                const hasActivity = !d.otherMonth && (tasks.length > 0 || notes.length > 0);
+
+                return `
+                    <div class="calendar-day ${d.otherMonth ? 'other-month' : ''} ${isToday ? 'today' : ''} ${hasActivity && !d.otherMonth ? 'has-activity' : ''}">
+                        ${d.day}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function prevMonth() {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        function todayMonth() {
+            currentCalendarDate = new Date();
+            renderCalendar();
+        }
+
         // Initialize
         window.addEventListener('load', () => {
             updateTime();
             loadStats();
+            renderTasks();
+            renderNotes();
+            renderCalendar();
+
+            // Auto-clear strikethrough tasks at midnight
+            setInterval(() => {
+                renderTasks();
+            }, 60000); // Check every minute
+
             setInterval(updateTime, 1000);
-            setInterval(loadStats, 5000); // Refresh stats every 5 seconds
+            setInterval(loadStats, 5000);
+        });
+
+        // Handle Enter key in task input
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.target.id === 'taskInput') {
+                addTask();
+            }
         });
     </script>
 </body>
