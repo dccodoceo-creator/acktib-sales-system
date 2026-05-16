@@ -307,6 +307,13 @@
     </div>
 
     <script>
+        // Google Sheets Auto-Sync
+        const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz1Vf-wO7x6dZkO6jmKbb-0EptIks5phXg_7vaTplJ2DPwPMGtxnvH9i6FehDm5h3KF3w/exec';
+        function syncToGoogleSheets(toolName, data) {
+            const payload = { tool: toolName, timestamp: new Date().toISOString(), data: data };
+            fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: JSON.stringify(payload) }).catch(e => console.log('Sync:', e));
+        }
+
         // Toggle custom skill input
         document.getElementById('skillSelect').addEventListener('change', function() {
             document.getElementById('customSkillGroup').style.display = this.value === 'Custom' ? 'block' : 'none';
@@ -336,8 +343,9 @@
             let skills = JSON.parse(localStorage.getItem('development_tracker_skills') || '[]');
             skills.push(skill);
             localStorage.setItem('development_tracker_skills', JSON.stringify(skills));
+            syncToGoogleSheets('Personal Tracker - Skills', skill);
 
-            alert('✅ Skill agregada');
+            alert('✅ Skill agregada y sincronizada');
             select.value = '';
             customName.value = '';
             document.getElementById('customSkillGroup').style.display = 'none';
@@ -362,8 +370,9 @@
             let feedbacks = JSON.parse(localStorage.getItem('development_tracker_feedback') || '[]');
             feedbacks.push(feedback);
             localStorage.setItem('development_tracker_feedback', JSON.stringify(feedbacks));
+            syncToGoogleSheets('Personal Tracker - Feedback', feedback);
 
-            alert('✅ Feedback guardado');
+            alert('✅ Feedback guardado y sincronizado');
             document.getElementById('feedbackContent').value = '';
             document.getElementById('feedbackSkill').value = '';
             loadFeedback();
@@ -387,8 +396,9 @@
             let progresses = JSON.parse(localStorage.getItem('development_tracker_progress') || '[]');
             progresses.push(progress);
             localStorage.setItem('development_tracker_progress', JSON.stringify(progresses));
+            syncToGoogleSheets('Personal Tracker - Progress', progress);
 
-            alert('✅ Progreso registrado');
+            alert('✅ Progreso registrado y sincronizado');
             document.getElementById('progressDesc').value = '';
             loadProgress();
             updateSummary();

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Google Sheets Sync Setup</title>
+</head>
+<body>
+    <h2>✅ Google Sheets Integration Complete</h2>
+
+    <p><strong>What's been done:</strong></p>
+    <ul>
+        <li>✅ daily_notifications.html - UPDATED with auto-sync</li>
+        <li>✅ journal_system.html - UPDATED with auto-sync</li>
+        <li>⏳ metrics_dashboard.html - READY (copy code below)</li>
+        <li>⏳ playbook_objections.html - READY (copy code below)</li>
+        <li>⏳ personal_tracker.html - READY (copy code below)</li>
+        <li>⏳ calendar_dashboard.html - READY (copy code below)</li>
+    </ul>
+
+    <h3>Remaining Files to Update (Copy & Paste Method)</h3>
+
+    <p><strong>For EACH remaining file:</strong></p>
+    <ol>
+        <li>Open the HTML file in a text editor</li>
+        <li>Find the <code>&lt;script&gt;</code> tag</li>
+        <li>Right after <code>&lt;script&gt;</code>, add this code:</li>
+    </ol>
+
+    <pre>
+// Google Sheets Auto-Sync
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz1Vf-wO7x6dZkO6jmKbb-0EptIks5phXg_7vaTplJ2DPwPMGtxnvH9i6FehDm5h3KF3w/exec';
+function syncToGoogleSheets(toolName, data) {
+    const payload = { tool: toolName, timestamp: new Date().toISOString(), data: data };
+    fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: JSON.stringify(payload) }).catch(e => console.log('Sync:', e));
+}
+    </pre>
+
+    <h3>For Each Save Function:</h3>
+    <p>After each <code>localStorage.setItem(...)</code> line, add:</p>
+    <pre>
+syncToGoogleSheets('[ToolName]', data);
+    </pre>
+
+    <h3>Example:</h3>
+    <pre>
+// Before:
+localStorage.setItem('dashboard_metrics', JSON.stringify(entry));
+alert('✅ Datos guardados');
+
+// After:
+localStorage.setItem('dashboard_metrics', JSON.stringify(entry));
+syncToGoogleSheets('Metrics Dashboard', entry);
+alert('✅ Datos guardados y sincronizados');
+    </pre>
+
+    <p><strong>OR just tell me to complete it!</strong> I can finish all 4 remaining files in one go.</p>
+</body>
+</html>

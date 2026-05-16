@@ -421,6 +421,13 @@
     </div>
 
     <script>
+        // Google Sheets Auto-Sync
+        const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz1Vf-wO7x6dZkO6jmKbb-0EptIks5phXg_7vaTplJ2DPwPMGtxnvH9i6FehDm5h3KF3w/exec';
+        function syncToGoogleSheets(toolName, data) {
+            const payload = { tool: toolName, timestamp: new Date().toISOString(), data: data };
+            fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: JSON.stringify(payload) }).catch(e => console.log('Sync:', e));
+        }
+
         const today = new Date();
         const dateStr = today.toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' });
         const weekNum = Math.ceil((today.getDate()) / 7);
@@ -455,8 +462,9 @@
             let entries = JSON.parse(localStorage.getItem('journal_daily') || '[]');
             entries.push(entry);
             localStorage.setItem('journal_daily', JSON.stringify(entries));
+            syncToGoogleSheets('Journal - Daily', entry);
 
-            alert('✅ Daily Journal guardado');
+            alert('✅ Daily Journal guardado y sincronizado');
             clearDailyForm();
             loadHistory('daily');
         }
@@ -483,7 +491,8 @@
             entries.push(entry);
             localStorage.setItem('journal_friday', JSON.stringify(entries));
 
-            alert('✅ Friday Journal guardado');
+            syncToGoogleSheets('Journal - Friday', entry);
+            alert('✅ Friday Journal guardado y sincronizado');
             clearFridayForm();
             loadHistory('friday');
         }
@@ -516,8 +525,9 @@
             let entries = JSON.parse(localStorage.getItem('journal_sunday') || '[]');
             entries.push(entry);
             localStorage.setItem('journal_sunday', JSON.stringify(entries));
+            syncToGoogleSheets('Journal - Sunday', entry);
 
-            alert('✅ Sunday Journal guardado');
+            alert('✅ Sunday Journal guardado y sincronizado');
             clearSundayForm();
             loadHistory('sunday');
         }

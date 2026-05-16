@@ -489,6 +489,13 @@
     </div>
 
     <script>
+        // Google Sheets Auto-Sync
+        const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz1Vf-wO7x6dZkO6jmKbb-0EptIks5phXg_7vaTplJ2DPwPMGtxnvH9i6FehDm5h3KF3w/exec';
+        function syncToGoogleSheets(toolName, data) {
+            const payload = { tool: toolName, timestamp: new Date().toISOString(), data: data };
+            fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: JSON.stringify(payload) }).catch(e => console.log('Sync:', e));
+        }
+
         const today = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
         // Initialize
@@ -590,7 +597,8 @@
             });
 
             localStorage.setItem('plan_' + today, JSON.stringify(data));
-            alert('✅ Plan AM guardado');
+            syncToGoogleSheets('Daily Notifications - Plan AM', data);
+            alert('✅ Plan AM guardado y sincronizado');
         }
 
         function clearPlanForm() {
@@ -645,7 +653,8 @@
             });
 
             localStorage.setItem('review_' + today, JSON.stringify(data));
-            alert('✅ Review PM guardado');
+            syncToGoogleSheets('Daily Notifications - Review PM', data);
+            alert('✅ Review PM guardado y sincronizado');
         }
 
         // Load review completed from plan

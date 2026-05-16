@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/27857871/README.md)
 # 🎯 ACKTIB Sales System
 **Complete Sales & Personal Development Management System**
 

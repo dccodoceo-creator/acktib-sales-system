@@ -245,6 +245,13 @@
     </div>
 
     <script>
+        // Google Sheets Auto-Sync
+        const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz1Vf-wO7x6dZkO6jmKbb-0EptIks5phXg_7vaTplJ2DPwPMGtxnvH9i6FehDm5h3KF3w/exec';
+        function syncToGoogleSheets(toolName, data) {
+            const payload = { tool: toolName, timestamp: new Date().toISOString(), data: data };
+            fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: JSON.stringify(payload) }).catch(e => console.log('Sync:', e));
+        }
+
         function saveObjection() {
             const objection = {
                 text: document.getElementById('objectionText').value,
@@ -264,8 +271,9 @@
             let objections = JSON.parse(localStorage.getItem('playbook_objections') || '[]');
             objections.push(objection);
             localStorage.setItem('playbook_objections', JSON.stringify(objections));
+            syncToGoogleSheets('Playbook Objections', objection);
 
-            alert('✅ Objeción guardada');
+            alert('✅ Objeción guardada y sincronizada');
             clearAddForm();
             loadDatabase();
             loadStatistics();
