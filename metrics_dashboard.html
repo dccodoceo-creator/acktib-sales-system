@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metrics Dashboard - ACKTIB</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #a8a8a8;
+            font-size: 14px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #3a3a3a;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            color: #a8a8a8;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            color: #f5f5f5;
+            border-bottom-color: #00d4ff;
+        }
+
+        .tab-btn:hover {
+            color: #f5f5f5;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: #2b2b2b;
+            border: 1px solid #454545;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .kpi-card {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #00d4ff;
+        }
+
+        .kpi-label {
+            font-size: 12px;
+            color: #a8a8a8;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 5px;
+        }
+
+        .kpi-goal {
+            font-size: 12px;
+            color: #686868;
+        }
+
+        .kpi-card.warning {
+            border-left-color: #ff9500;
+        }
+
+        .kpi-card.warning .kpi-value {
+            color: #ff9500;
+        }
+
+        .kpi-card.success {
+            border-left-color: #34c759;
+        }
+
+        .kpi-card.success .kpi-value {
+            color: #34c759;
+        }
+
+        .form-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            color: #f5f5f5;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: #252525;
+        }
+
+        .form-group textarea {
+            grid-column: 1 / -1;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        .btn {
+            background: #00d4ff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #00b8d4;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-group .btn {
+            flex: 1;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #a8a8a8;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #00d4ff;
+        }
+
+        .input-label {
+            font-size: 12px;
+            color: #a8a8a8;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #a8a8a8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Metrics Dashboard</h1>
+            <p>KPIs Semanales, Mensuales y Personales - ACKTIB</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('weekly')">📊 Weekly</button>
+            <button class="tab-btn" onclick="switchTab('monthly')">📈 Monthly</button>
+            <button class="tab-btn" onclick="switchTab('personal')">👤 Personal</button>
+            <button class="tab-btn" onclick="switchTab('input')">➕ Add Data</button>
+        </div>
+
+        <!-- WEEKLY TAB -->
+        <div id="weekly" class="tab-content active">
+            <div class="card">
+                <h2 style="margin-bottom: 20px;">📊 Weekly KPIs (Last 7 days)</h2>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card" id="weekCalls">
+                        <div class="kpi-label">Calls</div>
+                        <div class="kpi-value">0</div>
+                        <div class="kpi-goal">Goal: 50</div>
+                    </div>
+                    <div class="kpi-card" id="weekRatio">
+                        <div class="kpi-label">Response Ratio</div>
+                        <div class="kpi-value">0%</div>
+                        <div class="kpi-goal">Goal: 25-30%</div>
+                    </div>
+                    <div class="kpi-card" id="weekTalks">
+                        <div class="kpi-label">Talks</div>
+                        <div class="kpi-value">0</div>
+                        <div class="kpi-goal">Goal: 4</div>
+                    </div>
+                    <div class="kpi-card" id="weekProposals">
+                        <div class="kpi-label">Proposals</div>
+                        <div class="kpi-value">0</div>
+                        <div class="kpi-goal"></div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="weekChart"></canvas>
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-label">🏆 Best Day</div>
+                        <div class="stat-value" id="bestDay">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">🚫 Top Objection</div>
+                        <div class="stat-value" id="topObjection" style="font-size: 14px;">-</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">⏱️ Avg Duration</div>
+                        <div class="stat-value" id="avgDuration">0m</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MONTHLY TAB -->
+        <div id="monthly" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 20px;">📈 Monthly KPIs</h2>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card" id="monthCalls">
+                        <div class="kpi-label">Calls</div>
+                        <div class="kpi-value">0</div>
+                        <div class="kpi-goal">Goal: 200</div>
+                    </div>
+                    <div class="kpi-card" id="monthRatio">
+                        <div class="kpi-label">Avg Ratio</div>
+                        <div class="kpi-value">0%</div>
+                        <div class="kpi-goal"></div>
+                    </div>
+                    <div class="kpi-card" id="monthTalks">
+                        <div class="kpi-label">Talks</div>
+                        <div class="kpi-value">0</div>
+                        <div class="kpi-goal">Goal: 16</div>
+                    </div>
+                    <div class="kpi-card" id="monthRevenue">
+                        <div class="kpi-label">Revenue</div>
+                        <div class="kpi-value">$0</div>
+                        <div class="kpi-goal"></div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="monthChart"></canvas>
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <div class="stat-label">🔄 Talk→Proposal</div>
+                        <div class="stat-value" id="talkProposalConv">0%</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">📊 Month Trend</div>
+                        <div class="stat-value" id="monthTrend">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PERSONAL TAB -->
+        <div id="personal" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 20px;">👤 Personal Development KPIs</h2>
+
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-label">Call Speed</div>
+                        <div class="kpi-value" id="personalSpeed">0m</div>
+                        <div class="kpi-goal">Trend: ↓ mejor</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Close Rate</div>
+                        <div class="kpi-value" id="personalClose">0%</div>
+                        <div class="kpi-goal">Trend: ↑ mejor</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Objections Handled</div>
+                        <div class="kpi-value" id="personalObjections">0</div>
+                        <div class="kpi-goal">tipos únicos</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-label">Proposals Ratio</div>
+                        <div class="kpi-value" id="personalProposals">0%</div>
+                        <div class="kpi-goal"></div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 20px; margin-bottom: 15px;">🎯 Skills in Progress</h3>
+                <div class="stat-item" style="margin-bottom: 10px;">
+                    <div class="stat-label">Current Skills Being Developed</div>
+                    <div style="text-align: left; color: #a8a8a8; font-size: 13px;">
+                        <ul id="skillsList" style="list-style: none; margin-top: 10px;">
+                            <li>✓ Call speed improvement</li>
+                            <li>✓ Objection handling</li>
+                            <li>✓ Active listening</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INPUT TAB -->
+        <div id="input" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 20px;">➕ Register Daily Data</h2>
+
+                <div class="form-group">
+                    <div>
+                        <label class="input-label">Date</label>
+                        <input type="date" id="inputDate">
+                    </div>
+                    <div>
+                        <label class="input-label">Calls</label>
+                        <input type="number" id="inputCalls" placeholder="0">
+                    </div>
+                    <div>
+                        <label class="input-label">Positive Responses</label>
+                        <input type="number" id="inputResponses" placeholder="0">
+                    </div>
+                    <div>
+                        <label class="input-label">Talks</label>
+                        <input type="number" id="inputTalks" placeholder="0">
+                    </div>
+                    <div>
+                        <label class="input-label">Proposals</label>
+                        <input type="number" id="inputProposals" placeholder="0">
+                    </div>
+                    <div>
+                        <label class="input-label">Main Objection</label>
+                        <input type="text" id="inputObjection" placeholder="e.g., Price, Timing...">
+                    </div>
+                    <div>
+                        <label class="input-label">Avg Duration (min)</label>
+                        <input type="number" id="inputDuration" placeholder="0">
+                    </div>
+                    <textarea id="inputNotes" placeholder="Notes..."></textarea>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn" onclick="saveMetricData()">💾 Save Entry</button>
+                    <button class="btn" style="background: #454545; color: #f5f5f5;" onclick="clearInputForm()">Clear</button>
+                </div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 15px;">📋 Recent Entries</h3>
+                <div id="recentEntries" class="empty-state">Sin entradas aún</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set today's date in input
+        document.getElementById('inputDate').valueAsDate = new Date();
+
+        // Save metric data
+        function saveMetricData() {
+            const entry = {
+                date: document.getElementById('inputDate').value,
+                calls: parseInt(document.getElementById('inputCalls').value) || 0,
+                responses: parseInt(document.getElementById('inputResponses').value) || 0,
+                talks: parseInt(document.getElementById('inputTalks').value) || 0,
+                proposals: parseInt(document.getElementById('inputProposals').value) || 0,
+                objection: document.getElementById('inputObjection').value,
+                duration: parseInt(document.getElementById('inputDuration').value) || 0,
+                notes: document.getElementById('inputNotes').value,
+                timestamp: new Date().toISOString()
+            };
+
+            let metrics = JSON.parse(localStorage.getItem('dashboard_metrics') || '[]');
+            metrics.push(entry);
+            localStorage.setItem('dashboard_metrics', JSON.stringify(metrics));
+
+            alert('✅ Métrica guardada');
+            clearInputForm();
+            loadMetrics();
+            loadRecentEntries();
+        }
+
+        function clearInputForm() {
+            document.getElementById('inputDate').valueAsDate = new Date();
+            document.getElementById('inputCalls').value = '';
+            document.getElementById('inputResponses').value = '';
+            document.getElementById('inputTalks').value = '';
+            document.getElementById('inputProposals').value = '';
+            document.getElementById('inputObjection').value = '';
+            document.getElementById('inputDuration').value = '';
+            document.getElementById('inputNotes').value = '';
+        }
+
+        // Load metrics
+        function loadMetrics() {
+            const metrics = JSON.parse(localStorage.getItem('dashboard_metrics') || '[]');
+            const today = new Date();
+            const sevenDaysAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+            // Weekly
+            const weekMetrics = metrics.filter(m => new Date(m.date) >= sevenDaysAgo);
+            const weekCalls = weekMetrics.reduce((sum, m) => sum + m.calls, 0);
+            const weekResponses = weekMetrics.reduce((sum, m) => sum + m.responses, 0);
+            const weekTalks = weekMetrics.reduce((sum, m) => sum + m.talks, 0);
+            const weekProposals = weekMetrics.reduce((sum, m) => sum + m.proposals, 0);
+            const weekRatio = weekCalls > 0 ? Math.round((weekResponses / weekCalls) * 100) : 0;
+
+            updateKPI('weekCalls', weekCalls, 50);
+            updateKPI('weekTalks', weekTalks, 4);
+            updateKPI('weekProposals', weekProposals);
+            updateKPI('weekRatio', weekRatio + '%', '25-30%');
+
+            // Monthly
+            const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+            const monthMetrics = metrics.filter(m => new Date(m.date) >= monthStart);
+            const monthCalls = monthMetrics.reduce((sum, m) => sum + m.calls, 0);
+            const monthResponses = monthMetrics.reduce((sum, m) => sum + m.responses, 0);
+            const monthTalks = monthMetrics.reduce((sum, m) => sum + m.talks, 0);
+            const monthProposals = monthMetrics.reduce((sum, m) => sum + m.proposals, 0);
+            const monthRatio = monthCalls > 0 ? Math.round((monthResponses / monthCalls) * 100) : 0;
+
+            updateKPI('monthCalls', monthCalls, 200);
+            updateKPI('monthTalks', monthTalks, 16);
+            updateKPI('monthRevenue', '$0');
+            updateKPI('monthRatio', monthRatio + '%');
+
+            // Personal
+            const avgDuration = weekMetrics.length > 0 ? Math.round(weekMetrics.reduce((sum, m) => sum + m.duration, 0) / weekMetrics.length) : 0;
+            const closeRate = weekTalks > 0 ? Math.round((weekProposals / weekTalks) * 100) : 0;
+            document.getElementById('personalSpeed').textContent = avgDuration + 'm';
+            document.getElementById('personalClose').textContent = closeRate + '%';
+
+            // Statistics
+            document.getElementById('bestDay').textContent = weekMetrics.length > 0 ? 'Mon' : '-';
+            document.getElementById('avgDuration').textContent = avgDuration + 'm';
+
+            const objections = {};
+            weekMetrics.forEach(m => {
+                if (m.objection) objections[m.objection] = (objections[m.objection] || 0) + 1;
+            });
+            const topObjection = Object.keys(objections).sort((a, b) => objections[b] - objections[a])[0] || '-';
+            document.getElementById('topObjection').textContent = topObjection;
+
+            // Talk→Proposal conversion
+            const talkProposalConv = monthTalks > 0 ? Math.round((monthProposals / monthTalks) * 100) : 0;
+            document.getElementById('talkProposalConv').textContent = talkProposalConv + '%';
+
+            // Charts
+            drawCharts(weekMetrics, monthMetrics);
+        }
+
+        function updateKPI(elementId, value, goal) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.querySelector('.kpi-value').textContent = value;
+                if (goal) element.querySelector('.kpi-goal').textContent = `Goal: ${goal}`;
+            }
+        }
+
+        // Draw charts
+        let weekChart, monthChart;
+
+        function drawCharts(weekMetrics, monthMetrics) {
+            // Week Chart
+            const weekLabels = weekMetrics.map(m => m.date);
+            const weekCallsData = weekMetrics.map(m => m.calls);
+            const weekTalksData = weekMetrics.map(m => m.talks);
+
+            const weekCtx = document.getElementById('weekChart');
+            if (weekChart) weekChart.destroy();
+
+            weekChart = new Chart(weekCtx, {
+                type: 'line',
+                data: {
+                    labels: weekLabels.length > 0 ? weekLabels : ['No data'],
+                    datasets: [
+                        {
+                            label: 'Calls',
+                            data: weekCallsData,
+                            borderColor: '#00d4ff',
+                            backgroundColor: 'rgba(0, 212, 255, 0.1)',
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Talks',
+                            data: weekTalksData,
+                            borderColor: '#34c759',
+                            backgroundColor: 'rgba(52, 199, 89, 0.1)',
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#a8a8a8' } } },
+                    scales: {
+                        y: { ticks: { color: '#a8a8a8' }, grid: { color: '#3a3a3a' } },
+                        x: { ticks: { color: '#a8a8a8' }, grid: { color: '#3a3a3a' } }
+                    }
+                }
+            });
+
+            // Month Chart
+            const monthLabels = monthMetrics.map(m => m.date);
+            const monthCallsData = monthMetrics.map(m => m.calls);
+            const monthTalksData = monthMetrics.map(m => m.talks);
+
+            const monthCtx = document.getElementById('monthChart');
+            if (monthChart) monthChart.destroy();
+
+            monthChart = new Chart(monthCtx, {
+                type: 'bar',
+                data: {
+                    labels: monthLabels.length > 0 ? monthLabels : ['No data'],
+                    datasets: [
+                        {
+                            label: 'Calls',
+                            data: monthCallsData,
+                            backgroundColor: '#00d4ff'
+                        },
+                        {
+                            label: 'Talks',
+                            data: monthTalksData,
+                            backgroundColor: '#34c759'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#a8a8a8' } } },
+                    scales: {
+                        y: { ticks: { color: '#a8a8a8' }, grid: { color: '#3a3a3a' } },
+                        x: { ticks: { color: '#a8a8a8' }, grid: { color: '#3a3a3a' } }
+                    }
+                }
+            });
+        }
+
+        // Load recent entries
+        function loadRecentEntries() {
+            const metrics = JSON.parse(localStorage.getItem('dashboard_metrics') || '[]');
+            const recent = metrics.slice(-5).reverse();
+            const container = document.getElementById('recentEntries');
+
+            if (recent.length === 0) {
+                container.innerHTML = '<div class="empty-state">Sin entradas aún</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            recent.forEach(entry => {
+                const div = document.createElement('div');
+                div.style.cssText = 'background: #1a1a1a; padding: 12px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid #00d4ff; font-size: 13px;';
+                div.innerHTML = `
+                    <strong>${entry.date}</strong> - Calls: ${entry.calls}, Talks: ${entry.talks}, Proposals: ${entry.proposals}
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Switch tabs
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            loadMetrics();
+            loadRecentEntries();
+        });
+    </script>
+</body>
+</html>

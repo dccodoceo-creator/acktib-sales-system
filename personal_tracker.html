@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Tracker - ACKTIB</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #f5f5f5;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 28px; margin-bottom: 8px; }
+        .header p { color: #a8a8a8; font-size: 14px; }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #3a3a3a;
+        }
+        .tab-btn {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            color: #a8a8a8;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .tab-btn.active { color: #f5f5f5; border-bottom-color: #00d4ff; }
+        .tab-btn:hover { color: #f5f5f5; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .card {
+            background: #2b2b2b;
+            border: 1px solid #454545;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .skill-item {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 3px solid #00d4ff;
+        }
+        .skill-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        .skill-level {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+        .level-bar {
+            width: 20px;
+            height: 6px;
+            background: #3a3a3a;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .level-bar.filled { background: #00d4ff; }
+        .skill-trend {
+            font-size: 12px;
+            color: #686868;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #a8a8a8;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            color: #f5f5f5;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: #252525;
+        }
+        .form-group textarea { min-height: 80px; resize: vertical; }
+        .btn {
+            background: #00d4ff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+        .btn:hover { background: #00b8d4; }
+        .btn.secondary { background: #454545; color: #f5f5f5; }
+        .btn.secondary:hover { background: #555555; }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .summary-card {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 3px solid #34c759;
+        }
+        .summary-card.weak { border-left-color: #ff9500; }
+        .summary-label { font-size: 12px; color: #a8a8a8; margin-bottom: 5px; }
+        .summary-value { font-size: 18px; font-weight: 600; color: #34c759; }
+        .summary-card.weak .summary-value { color: #ff9500; }
+        .empty-state { text-align: center; padding: 40px 20px; color: #a8a8a8; }
+        .feedback-item {
+            background: #1a1a1a;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid #00d4ff;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👤 Personal Tracker</h1>
+            <p>Tu evolución como vendedor - ACKTIB</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('summary')">📊 Summary</button>
+            <button class="tab-btn" onclick="switchTab('skills')">🎯 Skills</button>
+            <button class="tab-btn" onclick="switchTab('feedback')">💬 Feedback</button>
+            <button class="tab-btn" onclick="switchTab('progress')">📈 Progress</button>
+        </div>
+
+        <!-- SUMMARY TAB -->
+        <div id="summary" class="tab-content active">
+            <div class="card">
+                <h2 style="margin-bottom: 20px;">📊 Development Summary</h2>
+
+                <h3 style="margin-bottom: 15px;">💪 Your Strengths</h3>
+                <div id="strengthsList">
+                    <div class="empty-state">Sin datos aún</div>
+                </div>
+
+                <h3 style="margin: 30px 0 15px 0;">⚠️ Areas to Improve</h3>
+                <div id="weaknessList">
+                    <div class="empty-state">Sin datos aún</div>
+                </div>
+
+                <div class="summary-grid" style="margin-top: 30px;">
+                    <div class="summary-card">
+                        <div class="summary-label">Total Skills Tracked</div>
+                        <div class="summary-value" id="totalSkills">0</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Feedback Entries</div>
+                        <div class="summary-value" id="totalFeedback">0</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Progress Records</div>
+                        <div class="summary-value" id="totalProgress">0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SKILLS TAB -->
+        <div id="skills" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 20px;">🎯 Skills Tracking</h2>
+
+                <div id="skillsList">
+                    <div class="empty-state">Sin skills registradas. Agrega tu primera skill.</div>
+                </div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 15px;">➕ Add Skill</h3>
+                <div class="form-group">
+                    <label>Skill Name</label>
+                    <select id="skillSelect">
+                        <option value="">Selecciona una skill...</option>
+                        <option value="Call speed">Call speed</option>
+                        <option value="Close rate">Close rate</option>
+                        <option value="Objection handling">Objection handling</option>
+                        <option value="Active listening">Active listening</option>
+                        <option value="Proposal presentation">Proposal presentation</option>
+                        <option value="Post-talk follow-up">Post-talk follow-up</option>
+                        <option value="Custom">Otra...</option>
+                    </select>
+                </div>
+
+                <div id="customSkillGroup" class="form-group" style="display: none;">
+                    <label>Skill Name (Custom)</label>
+                    <input type="text" id="customSkillName" placeholder="Ej: Negociación...">
+                </div>
+
+                <div class="form-group">
+                    <label>Current Level (1-10)</label>
+                    <input type="number" id="skillLevel" min="1" max="10" value="5">
+                </div>
+
+                <button class="btn" onclick="addSkill()">➕ Add Skill</button>
+            </div>
+        </div>
+
+        <!-- FEEDBACK TAB -->
+        <div id="feedback" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 20px;">💬 Feedback Management</h2>
+
+                <h3 style="margin-bottom: 15px;">📋 Feedback History</h3>
+                <div id="feedbackList">
+                    <div class="empty-state">Sin feedback aún</div>
+                </div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 15px;">➕ Add Feedback</h3>
+
+                <div class="form-group">
+                    <label>Feedback Source</label>
+                    <select id="feedbackSource">
+                        <option value="Sales Manager">Sales Manager</option>
+                        <option value="Senior Executive">Senior Executive</option>
+                        <option value="Client">Client</option>
+                        <option value="Self-observation">Self-observation</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Feedback Content</label>
+                    <textarea id="feedbackContent" placeholder="¿Qué feedback recibiste?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Related Skill (Optional)</label>
+                    <input type="text" id="feedbackSkill" placeholder="Ej: Call speed, Objection handling...">
+                </div>
+
+                <button class="btn" onclick="addFeedback()">➕ Add Feedback</button>
+            </div>
+        </div>
+
+        <!-- PROGRESS TAB -->
+        <div id="progress" class="tab-content">
+            <div class="card">
+                <h2 style="margin-bottom: 20px;">📈 Progress Recording</h2>
+
+                <h3 style="margin-bottom: 15px;">📊 Recent Progress</h3>
+                <div id="progressList">
+                    <div class="empty-state">Sin registros de progreso</div>
+                </div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 15px;">➕ Record Progress</h3>
+
+                <div class="form-group">
+                    <label>Progress Type</label>
+                    <select id="progressType">
+                        <option value="Milestone">Milestone Achieved</option>
+                        <option value="Improvement">Improvement</option>
+                        <option value="Challenge">Challenge Faced</option>
+                        <option value="Learning">Learning</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="progressDesc" placeholder="Describe el progreso..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Impact Level</label>
+                    <select id="progressImpact">
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+
+                <button class="btn" onclick="addProgress()">➕ Record Progress</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle custom skill input
+        document.getElementById('skillSelect').addEventListener('change', function() {
+            document.getElementById('customSkillGroup').style.display = this.value === 'Custom' ? 'block' : 'none';
+        });
+
+        function addSkill() {
+            const select = document.getElementById('skillSelect');
+            const customName = document.getElementById('customSkillName');
+            const level = document.getElementById('skillLevel').value;
+
+            let skillName = select.value;
+            if (skillName === 'Custom') {
+                skillName = customName.value;
+                if (!skillName) {
+                    alert('Ingresa el nombre de la skill');
+                    return;
+                }
+            }
+
+            const skill = {
+                name: skillName,
+                level: parseInt(level),
+                timestamp: new Date().toISOString(),
+                monthAdded: new Date().getMonth() + 1
+            };
+
+            let skills = JSON.parse(localStorage.getItem('development_tracker_skills') || '[]');
+            skills.push(skill);
+            localStorage.setItem('development_tracker_skills', JSON.stringify(skills));
+
+            alert('✅ Skill agregada');
+            select.value = '';
+            customName.value = '';
+            document.getElementById('customSkillGroup').style.display = 'none';
+            loadSkills();
+            updateSummary();
+        }
+
+        function addFeedback() {
+            const content = document.getElementById('feedbackContent').value;
+            if (!content) {
+                alert('Ingresa el feedback');
+                return;
+            }
+
+            const feedback = {
+                source: document.getElementById('feedbackSource').value,
+                content: content,
+                skill: document.getElementById('feedbackSkill').value,
+                timestamp: new Date().toISOString()
+            };
+
+            let feedbacks = JSON.parse(localStorage.getItem('development_tracker_feedback') || '[]');
+            feedbacks.push(feedback);
+            localStorage.setItem('development_tracker_feedback', JSON.stringify(feedbacks));
+
+            alert('✅ Feedback guardado');
+            document.getElementById('feedbackContent').value = '';
+            document.getElementById('feedbackSkill').value = '';
+            loadFeedback();
+            updateSummary();
+        }
+
+        function addProgress() {
+            const desc = document.getElementById('progressDesc').value;
+            if (!desc) {
+                alert('Ingresa la descripción del progreso');
+                return;
+            }
+
+            const progress = {
+                type: document.getElementById('progressType').value,
+                description: desc,
+                impact: document.getElementById('progressImpact').value,
+                timestamp: new Date().toISOString()
+            };
+
+            let progresses = JSON.parse(localStorage.getItem('development_tracker_progress') || '[]');
+            progresses.push(progress);
+            localStorage.setItem('development_tracker_progress', JSON.stringify(progresses));
+
+            alert('✅ Progreso registrado');
+            document.getElementById('progressDesc').value = '';
+            loadProgress();
+            updateSummary();
+        }
+
+        function loadSkills() {
+            const skills = JSON.parse(localStorage.getItem('development_tracker_skills') || '[]');
+            const container = document.getElementById('skillsList');
+
+            if (skills.length === 0) {
+                container.innerHTML = '<div class="empty-state">Sin skills registradas</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            const grouped = {};
+            skills.forEach(skill => {
+                if (!grouped[skill.name]) grouped[skill.name] = [];
+                grouped[skill.name].push(skill);
+            });
+
+            Object.entries(grouped).forEach(([name, entries]) => {
+                const latest = entries[entries.length - 1];
+                const previous = entries.length > 1 ? entries[entries.length - 2].level : null;
+                const trend = previous ? (latest.level > previous ? '↑' : latest.level < previous ? '↓' : '→') : '→';
+
+                const item = document.createElement('div');
+                item.className = 'skill-item';
+                item.innerHTML = `
+                    <div class="skill-name">${name}</div>
+                    <div class="skill-level">
+                        ${Array.from({length: 10}, (_, i) =>
+                            `<div class="level-bar ${i < latest.level ? 'filled' : ''}"></div>`
+                        ).join('')}
+                    </div>
+                    <div class="skill-trend">Nivel: ${latest.level}/10 ${trend}</div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function loadFeedback() {
+            const feedbacks = JSON.parse(localStorage.getItem('development_tracker_feedback') || '[]');
+            const container = document.getElementById('feedbackList');
+
+            if (feedbacks.length === 0) {
+                container.innerHTML = '<div class="empty-state">Sin feedback aún</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            feedbacks.reverse().slice(0, 5).forEach(f => {
+                const item = document.createElement('div');
+                item.className = 'feedback-item';
+                item.innerHTML = `
+                    <strong>${f.source}</strong> ${f.skill ? `(${f.skill})` : ''}<br>
+                    ${f.content.substring(0, 80)}...
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function loadProgress() {
+            const progresses = JSON.parse(localStorage.getItem('development_tracker_progress') || '[]');
+            const container = document.getElementById('progressList');
+
+            if (progresses.length === 0) {
+                container.innerHTML = '<div class="empty-state">Sin progreso registrado</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            progresses.reverse().slice(0, 5).forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'skill-item';
+                item.innerHTML = `
+                    <div class="skill-name">${p.type} (${p.impact})</div>
+                    <div class="skill-trend">${p.description.substring(0, 60)}...</div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function updateSummary() {
+            const skills = JSON.parse(localStorage.getItem('development_tracker_skills') || '[]');
+            const feedbacks = JSON.parse(localStorage.getItem('development_tracker_feedback') || '[]');
+            const progresses = JSON.parse(localStorage.getItem('development_tracker_progress') || '[]');
+
+            document.getElementById('totalSkills').textContent = new Set(skills.map(s => s.name)).size;
+            document.getElementById('totalFeedback').textContent = feedbacks.length;
+            document.getElementById('totalProgress').textContent = progresses.length;
+
+            // Strengths and weaknesses
+            const grouped = {};
+            skills.forEach(skill => {
+                if (!grouped[skill.name]) grouped[skill.name] = [];
+                grouped[skill.name].push(skill);
+            });
+
+            const avgSkills = Object.entries(grouped).map(([name, entries]) => ({
+                name,
+                avg: entries.reduce((sum, e) => sum + e.level, 0) / entries.length
+            }));
+
+            const strengthsList = document.getElementById('strengthsList');
+            const weaknessList = document.getElementById('weaknessList');
+
+            if (avgSkills.length === 0) {
+                strengthsList.innerHTML = '<div class="empty-state">Registra skills para ver análisis</div>';
+                weaknessList.innerHTML = '<div class="empty-state">Registra skills para ver análisis</div>';
+            } else {
+                const sorted = avgSkills.sort((a, b) => b.avg - a.avg);
+                strengthsList.innerHTML = sorted.slice(0, 3).map(s =>
+                    `<div class="skill-item"><strong>${s.name}</strong><br>Promedio: ${s.avg.toFixed(1)}/10</div>`
+                ).join('');
+                weaknessList.innerHTML = sorted.slice(-3).reverse().map(s =>
+                    `<div class="skill-item weak"><strong>${s.name}</strong><br>Promedio: ${s.avg.toFixed(1)}/10</div>`
+                ).join('');
+            }
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        window.addEventListener('load', () => {
+            loadSkills();
+            loadFeedback();
+            loadProgress();
+            updateSummary();
+        });
+    </script>
+</body>
+</html>

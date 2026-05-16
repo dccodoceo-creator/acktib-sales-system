@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal System - ACKTIB</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #a8a8a8;
+            font-size: 14px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #3a3a3a;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            color: #a8a8a8;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            color: #f5f5f5;
+            border-bottom-color: #00d4ff;
+        }
+
+        .tab-btn:hover {
+            color: #f5f5f5;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .card {
+            background: #2b2b2b;
+            border: 1px solid #454545;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #a8a8a8;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            color: #f5f5f5;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: #252525;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+        }
+
+        .btn {
+            background: #00d4ff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #00b8d4;
+        }
+
+        .btn.secondary {
+            background: #454545;
+            color: #f5f5f5;
+        }
+
+        .btn.secondary:hover {
+            background: #555555;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-group .btn {
+            flex: 1;
+        }
+
+        .history-section {
+            margin-top: 30px;
+        }
+
+        .history-section h3 {
+            font-size: 14px;
+            margin-bottom: 15px;
+            color: #a8a8a8;
+        }
+
+        .entry-item {
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .entry-item:hover {
+            background: #252525;
+            border-color: #454545;
+        }
+
+        .entry-date {
+            font-size: 12px;
+            color: #00d4ff;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .entry-preview {
+            font-size: 13px;
+            color: #a8a8a8;
+            line-height: 1.5;
+            max-height: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .daily-section,
+        .friday-section,
+        .sunday-section {
+            display: none;
+        }
+
+        .daily-section.active,
+        .friday-section.active,
+        .sunday-section.active {
+            display: block;
+        }
+
+        .prompt-item {
+            background: #1a1a1a;
+            padding: 15px;
+            border-left: 3px solid #00d4ff;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .prompt-label {
+            font-size: 12px;
+            color: #00d4ff;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .prompt-input {
+            width: 100%;
+            background: #2b2b2b;
+            border: 1px solid #3a3a3a;
+            color: #f5f5f5;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .prompt-input:focus {
+            outline: none;
+            border-color: #00d4ff;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #a8a8a8;
+        }
+
+        .questions-list {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .questions-list li {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            font-size: 13px;
+            color: #a8a8a8;
+        }
+
+        .questions-list li:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📝 Journal System</h1>
+            <p>Reflexión diaria, semanal y preparación - ACKTIB</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchJournalType('daily')">📝 Daily</button>
+            <button class="tab-btn" onclick="switchJournalType('friday')">🎯 Friday</button>
+            <button class="tab-btn" onclick="switchJournalType('sunday')">🚀 Sunday</button>
+        </div>
+
+        <!-- DAILY JOURNAL -->
+        <div id="daily-journal" class="tab-content active">
+            <div class="card">
+                <div class="daily-section active">
+                    <h2 style="margin-bottom: 20px;">📝 Daily Journal (Mon-Fri)</h2>
+
+                    <div class="prompt-item">
+                        <div class="prompt-label">🔍 Important points of the day</div>
+                        <textarea class="prompt-input" id="dailyImportant" placeholder="¿Qué fue lo más importante hoy?"></textarea>
+                    </div>
+
+                    <div class="prompt-item">
+                        <div class="prompt-label">👀 Observations and patterns</div>
+                        <textarea class="prompt-input" id="dailyObservations" placeholder="¿Qué patrones observaste? ¿Qué comportamientos repetidos?"></textarea>
+                    </div>
+
+                    <div class="prompt-item">
+                        <div class="prompt-label">📌 Free notes</div>
+                        <textarea class="prompt-input" id="dailyNotes" placeholder="Notas libres, ideas, reflexiones..."></textarea>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn" onclick="saveDailyJournal()">💾 Guardar</button>
+                        <button class="btn secondary" onclick="clearDailyForm()">Limpiar</button>
+                    </div>
+
+                    <div class="history-section">
+                        <h3>📋 Historial de entradas</h3>
+                        <div id="dailyHistory" class="empty-state">Sin entradas aún</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FRIDAY JOURNAL -->
+        <div id="friday-journal" class="tab-content">
+            <div class="card">
+                <div class="friday-section active">
+                    <h2 style="margin-bottom: 20px;">🎯 Friday Journal - Weekly Review</h2>
+
+                    <div class="prompt-item">
+                        <div class="prompt-label">✅ What went well</div>
+                        <textarea class="prompt-input" id="fridayWell" placeholder="¿Qué logros tuviste? ¿Qué funcionó bien?"></textarea>
+                    </div>
+
+                    <div class="prompt-item">
+                        <div class="prompt-label">⚠️ Challenges encountered</div>
+                        <textarea class="prompt-input" id="fridayChallenges" placeholder="¿Qué desafíos enfrentaste? ¿Cómo los resolviste?"></textarea>
+                    </div>
+
+                    <div class="prompt-item">
+                        <div class="prompt-label">📊 Weekly metrics</div>
+                        <textarea class="prompt-input" id="fridayMetrics" placeholder="Calls: ?\nTalks: ?\nProposals: ?\nResponse ratio: ?"></textarea>
+                    </div>
+
+                    <div class="prompt-item">
+                        <div class="prompt-label">🎯 Focus for next week</div>
+                        <textarea class="prompt-input" id="fridayFocus" placeholder="¿En qué enfocarte? Prioridades principales..."></textarea>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn" onclick="saveFridayJournal()">💾 Guardar</button>
+                        <button class="btn secondary" onclick="clearFridayForm()">Limpiar</button>
+                    </div>
+
+                    <div class="history-section">
+                        <h3>📋 Historial semanal</h3>
+                        <div id="fridayHistory" class="empty-state">Sin entradas aún</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUNDAY JOURNAL -->
+        <div id="sunday-journal" class="tab-content">
+            <div class="card">
+                <div class="sunday-section active">
+                    <h2 style="margin-bottom: 20px;">🚀 Sunday Journal - Weekly Planning</h2>
+
+                    <div class="prompt-item">
+                        <div class="prompt-label">🎯 Main objective for the week</div>
+                        <textarea class="prompt-input" id="sundayObjective" placeholder="¿Cuál es tu objetivo principal para esta semana?"></textarea>
+                    </div>
+
+                    <div class="prompt-item">
+                        <div class="prompt-label">📋 Action plan by day (Mon-Fri)</div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px;">
+                            <div>
+                                <label style="font-size: 12px; color: #a8a8a8;">Lunes</label>
+                                <textarea class="prompt-input" id="sundayMon" placeholder="Plan..." style="min-height: 60px;"></textarea>
+                            </div>
+                            <div>
+                                <label style="font-size: 12px; color: #a8a8a8;">Martes</label>
+                                <textarea class="prompt-input" id="sundayTue" placeholder="Plan..." style="min-height: 60px;"></textarea>
+                            </div>
+                            <div>
+                                <label style="font-size: 12px; color: #a8a8a8;">Miércoles</label>
+                                <textarea class="prompt-input" id="sundayWed" placeholder="Plan..." style="min-height: 60px;"></textarea>
+                            </div>
+                            <div>
+                                <label style="font-size: 12px; color: #a8a8a8;">Jueves</label>
+                                <textarea class="prompt-input" id="sundayThu" placeholder="Plan..." style="min-height: 60px;"></textarea>
+                            </div>
+                            <div>
+                                <label style="font-size: 12px; color: #a8a8a8;">Viernes</label>
+                                <textarea class="prompt-input" id="sundayFri" placeholder="Plan..." style="min-height: 60px;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="prompt-item">
+                        <div class="prompt-label">🧠 Mindset and learnings</div>
+                        <textarea class="prompt-input" id="sundayMindset" placeholder="¿Qué aprendiste la semana pasada? ¿En qué mentalidad necesitas estar?"></textarea>
+                    </div>
+
+                    <div class="prompt-item">
+                        <div class="prompt-label">❓ Reflection questions</div>
+                        <div class="questions-list">
+                            <ul style="list-style: none;">
+                                <li>✓ ¿Qué mejoraré esta semana?</li>
+                                <li>✓ ¿Dónde necesito crecer?</li>
+                                <li>✓ ¿Cuál es mi mayor desafío?</li>
+                                <li>✓ ¿Cómo puedo ser mejor profesional?</li>
+                            </ul>
+                        </div>
+                        <textarea class="prompt-input" id="sundayReflection" placeholder="Tus respuestas..." style="margin-top: 10px;"></textarea>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn" onclick="saveSundayJournal()">💾 Guardar</button>
+                        <button class="btn secondary" onclick="clearSundayForm()">Limpiar</button>
+                    </div>
+
+                    <div class="history-section">
+                        <h3>📋 Historial de semanas</h3>
+                        <div id="sundayHistory" class="empty-state">Sin entradas aún</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const today = new Date();
+        const dateStr = today.toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        const weekNum = Math.ceil((today.getDate()) / 7);
+
+        // Switch journal type
+        function switchJournalType(type) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            const journalMap = {
+                'daily': 'daily-journal',
+                'friday': 'friday-journal',
+                'sunday': 'sunday-journal'
+            };
+
+            document.getElementById(journalMap[type]).classList.add('active');
+            event.target.classList.add('active');
+
+            loadHistory(type);
+        }
+
+        // Save Daily Journal
+        function saveDailyJournal() {
+            const entry = {
+                date: dateStr,
+                important: document.getElementById('dailyImportant').value,
+                observations: document.getElementById('dailyObservations').value,
+                notes: document.getElementById('dailyNotes').value,
+                timestamp: new Date().toISOString()
+            };
+
+            let entries = JSON.parse(localStorage.getItem('journal_daily') || '[]');
+            entries.push(entry);
+            localStorage.setItem('journal_daily', JSON.stringify(entries));
+
+            alert('✅ Daily Journal guardado');
+            clearDailyForm();
+            loadHistory('daily');
+        }
+
+        function clearDailyForm() {
+            document.getElementById('dailyImportant').value = '';
+            document.getElementById('dailyObservations').value = '';
+            document.getElementById('dailyNotes').value = '';
+        }
+
+        // Save Friday Journal
+        function saveFridayJournal() {
+            const entry = {
+                week: weekNum,
+                date: dateStr,
+                well: document.getElementById('fridayWell').value,
+                challenges: document.getElementById('fridayChallenges').value,
+                metrics: document.getElementById('fridayMetrics').value,
+                focus: document.getElementById('fridayFocus').value,
+                timestamp: new Date().toISOString()
+            };
+
+            let entries = JSON.parse(localStorage.getItem('journal_friday') || '[]');
+            entries.push(entry);
+            localStorage.setItem('journal_friday', JSON.stringify(entries));
+
+            alert('✅ Friday Journal guardado');
+            clearFridayForm();
+            loadHistory('friday');
+        }
+
+        function clearFridayForm() {
+            document.getElementById('fridayWell').value = '';
+            document.getElementById('fridayChallenges').value = '';
+            document.getElementById('fridayMetrics').value = '';
+            document.getElementById('fridayFocus').value = '';
+        }
+
+        // Save Sunday Journal
+        function saveSundayJournal() {
+            const entry = {
+                week: weekNum,
+                date: dateStr,
+                objective: document.getElementById('sundayObjective').value,
+                plan: {
+                    mon: document.getElementById('sundayMon').value,
+                    tue: document.getElementById('sundayTue').value,
+                    wed: document.getElementById('sundayWed').value,
+                    thu: document.getElementById('sundayThu').value,
+                    fri: document.getElementById('sundayFri').value
+                },
+                mindset: document.getElementById('sundayMindset').value,
+                reflection: document.getElementById('sundayReflection').value,
+                timestamp: new Date().toISOString()
+            };
+
+            let entries = JSON.parse(localStorage.getItem('journal_sunday') || '[]');
+            entries.push(entry);
+            localStorage.setItem('journal_sunday', JSON.stringify(entries));
+
+            alert('✅ Sunday Journal guardado');
+            clearSundayForm();
+            loadHistory('sunday');
+        }
+
+        function clearSundayForm() {
+            document.getElementById('sundayObjective').value = '';
+            document.getElementById('sundayMon').value = '';
+            document.getElementById('sundayTue').value = '';
+            document.getElementById('sundayWed').value = '';
+            document.getElementById('sundayThu').value = '';
+            document.getElementById('sundayFri').value = '';
+            document.getElementById('sundayMindset').value = '';
+            document.getElementById('sundayReflection').value = '';
+        }
+
+        // Load history
+        function loadHistory(type) {
+            const storageKey = `journal_${type}`;
+            const entries = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            const historyDiv = document.getElementById(`${type}History`);
+
+            if (entries.length === 0) {
+                historyDiv.innerHTML = '<div class="empty-state">Sin entradas aún</div>';
+                return;
+            }
+
+            historyDiv.innerHTML = '';
+            entries.reverse().forEach((entry, idx) => {
+                const item = document.createElement('div');
+                item.className = 'entry-item';
+
+                let preview = '';
+                if (type === 'daily') {
+                    preview = entry.important.substring(0, 100);
+                } else if (type === 'friday') {
+                    preview = entry.well.substring(0, 100);
+                } else if (type === 'sunday') {
+                    preview = entry.objective.substring(0, 100);
+                }
+
+                item.innerHTML = `
+                    <div class="entry-date">${entry.date} - Semana ${entry.week || 'N/A'}</div>
+                    <div class="entry-preview">${preview}...</div>
+                `;
+
+                item.onclick = () => viewEntry(type, idx, entries.length - 1 - idx);
+                historyDiv.appendChild(item);
+            });
+        }
+
+        function viewEntry(type, displayIdx, actualIdx) {
+            alert(`Entrada ${displayIdx + 1}\n${new Date().toLocaleDateString()}\n\nClick para ver detalles completos en la consola.`);
+            const storageKey = `journal_${type}`;
+            const entries = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            console.log('Entrada completa:', entries[actualIdx]);
+        }
+
+        // Load histories on init
+        window.addEventListener('load', () => {
+            loadHistory('daily');
+            loadHistory('friday');
+            loadHistory('sunday');
+        });
+    </script>
+</body>
+</html>

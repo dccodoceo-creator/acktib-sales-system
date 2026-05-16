@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar Dashboard - ACKTIB</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #f5f5f5;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .header h1 { font-size: 28px; }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            background: #00d4ff;
+            color: #000;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        .btn:hover { background: #00b8d4; }
+        .btn.secondary { background: #454545; color: #f5f5f5; }
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #2b2b2b;
+            border-radius: 8px;
+        }
+        .calendar-header h2 { font-size: 20px; }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+        }
+        .weekday-header {
+            background: #1a1a1a;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 12px;
+            color: #a8a8a8;
+            border-radius: 6px;
+        }
+        .day-cell {
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            border-radius: 6px;
+            padding: 8px;
+            min-height: 100px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .day-cell:hover {
+            background: #252525;
+            border-color: #454545;
+        }
+        .day-cell.other-month {
+            background: #0f0f0f;
+            color: #686868;
+        }
+        .day-number {
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+        .day-activities {
+            font-size: 11px;
+            color: #a8a8a8;
+            line-height: 1.4;
+        }
+        .activity-icon {
+            margin-right: 3px;
+        }
+        .task-status {
+            display: flex;
+            gap: 4px;
+            margin-top: 6px;
+            font-size: 10px;
+        }
+        .task-check {
+            width: 12px;
+            height: 12px;
+            background: #3a3a3a;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .task-check.done { background: #34c759; color: #000; font-size: 8px; }
+        .today { border: 2px solid #00d4ff; }
+        .weekend { background: #1a1a1a; }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: #2b2b2b;
+            border: 1px solid #454545;
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .modal-header h3 { font-size: 18px; }
+        .close-btn {
+            background: none;
+            border: none;
+            color: #a8a8a8;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .modal-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #3a3a3a;
+        }
+        .modal-tab {
+            padding: 10px 15px;
+            background: none;
+            border: none;
+            color: #a8a8a8;
+            cursor: pointer;
+            font-size: 13px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .modal-tab.active {
+            color: #f5f5f5;
+            border-bottom-color: #00d4ff;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #a8a8a8;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            color: #f5f5f5;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: #252525;
+        }
+        .form-group textarea { min-height: 60px; resize: vertical; }
+        .activity-counter {
+            font-size: 11px;
+            color: #00d4ff;
+            margin-top: 6px;
+            padding-top: 6px;
+            border-top: 1px solid #3a3a3a;
+        }
+        .legend {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding: 15px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            font-size: 12px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .legend-icon { font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Calendar Dashboard</h1>
+            <div class="nav-buttons">
+                <button class="btn secondary" onclick="previousMonth()">← Anterior</button>
+                <button class="btn" onclick="goToday()">Hoy</button>
+                <button class="btn secondary" onclick="nextMonth()">Siguiente →</button>
+            </div>
+        </div>
+
+        <div class="calendar-header">
+            <h2 id="monthYear"></h2>
+            <div id="monthSummary" style="font-size: 12px; color: #a8a8a8;"></div>
+        </div>
+
+        <div class="calendar-grid" id="calendarGrid"></div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <span class="legend-icon">📞</span> Calls
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon">🎤</span> Talks
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon">📋</span> Proposals
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon">📝</span> Journal
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon">✓</span> Tasks (Mon-Fri)
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="dayModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalDate"></h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+
+            <div class="modal-tabs">
+                <button class="modal-tab active" onclick="switchModalTab('view')">📋 View</button>
+                <button class="modal-tab" onclick="switchModalTab('edit')">✏️ Edit</button>
+            </div>
+
+            <div id="viewTab" class="modal-tab-content active">
+                <div id="viewContent"></div>
+            </div>
+
+            <div id="editTab" class="modal-tab-content">
+                <div class="form-group">
+                    <label>Calls</label>
+                    <input type="number" id="editCalls" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Talks</label>
+                    <input type="number" id="editTalks" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Proposals</label>
+                    <input type="number" id="editProposals" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Plan AM (0%, 50%, 100%)</label>
+                    <select id="editPlanAM">
+                        <option value="0">Not done (0%)</option>
+                        <option value="1">Half done (50%)</option>
+                        <option value="2">Completed (100%)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Review PM (0%, 50%, 100%)</label>
+                    <select id="editReviewPM">
+                        <option value="0">Not done (0%)</option>
+                        <option value="1">Half done (50%)</option>
+                        <option value="2">Completed (100%)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Journal Notes</label>
+                    <textarea id="editNotes" placeholder="Notas del día..."></textarea>
+                </div>
+                <button class="btn" style="width: 100%; margin-top: 20px;" onclick="saveDayData()">💾 Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentDate = new Date();
+        let selectedDate = null;
+
+        function renderCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            // Update header
+            document.getElementById('monthYear').textContent = currentDate.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+
+            // Get days
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay();
+
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+
+            // Weekday headers
+            const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            weekdays.forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'weekday-header';
+                header.textContent = day;
+                grid.appendChild(header);
+            });
+
+            // Previous month's days
+            const prevMonthDays = new Date(year, month, 0).getDate();
+            for (let i = startingDayOfWeek - 1; i >= 0; i--) {
+                const cell = document.createElement('div');
+                cell.className = 'day-cell other-month';
+                cell.textContent = prevMonthDays - i;
+                grid.appendChild(cell);
+            }
+
+            // Current month's days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const cell = document.createElement('div');
+                const date = new Date(year, month, day);
+                const dateStr = date.toISOString().split('T')[0];
+
+                cell.className = 'day-cell';
+                if (date.toDateString() === new Date().toDateString()) {
+                    cell.classList.add('today');
+                }
+                if (date.getDay() === 0 || date.getDay() === 6) {
+                    cell.classList.add('weekend');
+                }
+
+                cell.innerHTML = `<div class="day-number">${day}</div><div class="day-activities" id="activities-${dateStr}"></div>`;
+                cell.onclick = () => openDayModal(dateStr);
+                grid.appendChild(cell);
+            }
+
+            // Next month's days
+            const remainingCells = 42 - (startingDayOfWeek + daysInMonth); // 6 rows * 7 days
+            for (let day = 1; day <= remainingCells; day++) {
+                const cell = document.createElement('div');
+                cell.className = 'day-cell other-month';
+                cell.textContent = day;
+                grid.appendChild(cell);
+            }
+
+            loadAllDayData();
+        }
+
+        function loadAllDayData() {
+            const metrics = JSON.parse(localStorage.getItem('dashboard_metrics') || '[]');
+            const year = currentDate.getFullYear();
+            const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+
+            // Group by date
+            const dataByDate = {};
+            metrics.forEach(m => {
+                if (m.date.startsWith(`${year}-${month}`)) {
+                    dataByDate[m.date] = m;
+                }
+            });
+
+            // Render activities
+            Object.entries(dataByDate).forEach(([date, data]) => {
+                const element = document.getElementById(`activities-${date}`);
+                if (element) {
+                    let html = '';
+                    if (data.calls > 0) html += `<span class="activity-icon">📞${data.calls}</span> `;
+                    if (data.talks > 0) html += `<span class="activity-icon">🎤${data.talks}</span> `;
+                    if (data.proposals > 0) html += `<span class="activity-icon">📋${data.proposals}</span> `;
+                    element.innerHTML = html;
+                }
+            });
+        }
+
+        function openDayModal(dateStr) {
+            selectedDate = dateStr;
+            const date = new Date(dateStr + 'T00:00:00');
+            document.getElementById('modalDate').textContent = date.toLocaleDateString('es-ES', { weekday: 'long', month: 'long', day: 'numeric' });
+
+            const metrics = JSON.parse(localStorage.getItem('dashboard_metrics') || '[]');
+            const dayData = metrics.find(m => m.date === dateStr);
+
+            // View tab
+            const viewContent = document.getElementById('viewContent');
+            if (dayData) {
+                viewContent.innerHTML = `
+                    <div style="background: #1a1a1a; padding: 15px; border-radius: 8px;">
+                        <p><strong>Calls:</strong> ${dayData.calls}</p>
+                        <p><strong>Talks:</strong> ${dayData.talks}</p>
+                        <p><strong>Proposals:</strong> ${dayData.proposals}</p>
+                        <p><strong>Objection:</strong> ${dayData.objection || '-'}</p>
+                        <p><strong>Duration Avg:</strong> ${dayData.duration}m</p>
+                        <p><strong>Notes:</strong> ${dayData.notes || 'Sin notas'}</p>
+                    </div>
+                `;
+            } else {
+                viewContent.innerHTML = '<div style="color: #a8a8a8;">Sin datos registrados para este día</div>';
+            }
+
+            // Edit tab
+            document.getElementById('editCalls').value = dayData?.calls || '';
+            document.getElementById('editTalks').value = dayData?.talks || '';
+            document.getElementById('editProposals').value = dayData?.proposals || '';
+            document.getElementById('editNotes').value = dayData?.notes || '';
+
+            document.getElementById('dayModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('dayModal').classList.remove('active');
+            selectedDate = null;
+        }
+
+        function switchModalTab(tab) {
+            document.querySelectorAll('.modal-tab').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.modal-tab-content').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tab + 'Tab').classList.add('active');
+        }
+
+        function saveDayData() {
+            const entry = {
+                date: selectedDate,
+                calls: parseInt(document.getElementById('editCalls').value) || 0,
+                talks: parseInt(document.getElementById('editTalks').value) || 0,
+                proposals: parseInt(document.getElementById('editProposals').value) || 0,
+                notes: document.getElementById('editNotes').value,
+                timestamp: new Date().toISOString()
+            };
+
+            let metrics = JSON.parse(localStorage.getItem('dashboard_metrics') || '[]');
+            const existingIdx = metrics.findIndex(m => m.date === selectedDate);
+            if (existingIdx >= 0) {
+                metrics[existingIdx] = { ...metrics[existingIdx], ...entry };
+            } else {
+                metrics.push(entry);
+            }
+            localStorage.setItem('dashboard_metrics', JSON.stringify(metrics));
+
+            alert('✅ Datos guardados');
+            closeModal();
+            renderCalendar();
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        function goToday() {
+            currentDate = new Date();
+            renderCalendar();
+        }
+
+        window.addEventListener('load', () => {
+            renderCalendar();
+        });
+
+        document.getElementById('dayModal').addEventListener('click', (e) => {
+            if (e.target.id === 'dayModal') closeModal();
+        });
+    </script>
+</body>
+</html>
