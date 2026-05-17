@@ -696,7 +696,7 @@
         }
 
         /* INPUT SHARED */
-        .blocks-list input[type="text"] {
+        .blocks-list [contenteditable="true"] {
             background: transparent;
             border: none;
             color: inherit;
@@ -704,13 +704,20 @@
             font-family: inherit;
             width: 100%;
             outline: none;
-            caret-color: #e4a834;
             line-height: 1.5;
             padding: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            min-height: 1.5em;
         }
 
-        .blocks-list input[type="text"]::placeholder {
+        .blocks-list [contenteditable="true"]:empty:before {
+            content: attr(data-placeholder);
             color: #666666;
+        }
+
+        .blocks-list [contenteditable="true"]:focus {
+            outline: none;
         }
 
         @media (max-width: 900px) {
@@ -1067,7 +1074,7 @@
             tasksList.innerHTML = tasks.map((block, idx) => {
                 let html = `<div class="block type-todo" data-id="${block.id}">`;
                 html += `<div class="checkbox ${block.checked ? 'checked' : ''}" onclick="toggleCheckbox('${block.id}', 'task')"></div>`;
-                html += `<div class="block-content"><input type="text" value="${block.text}" placeholder="Add a task..." onkeydown="handleKeydown(event, '${block.id}', 'task')" oninput="updateBlock('${block.id}', this.value, 'task')"></div>`;
+                html += `<div class="block-content"><div contenteditable="true" data-placeholder="Add a task..." onkeydown="handleKeydown(event, '${block.id}', 'task')" oninput="updateBlock('${block.id}', this.textContent, 'task')">${escapeHtml(block.text)}</div></div>`;
                 html += `</div>`;
                 return html;
             }).join('');
@@ -1077,18 +1084,25 @@
             notesList.innerHTML = notes.map((block, idx) => {
                 let html = `<div class="block type-bullet" data-id="${block.id}">`;
                 html += `<span class="bullet-dash">–</span>`;
-                html += `<div class="block-content"><input type="text" value="${block.text}" placeholder="Add a note..." onkeydown="handleKeydown(event, '${block.id}', 'note')" oninput="updateBlock('${block.id}', this.value, 'note')"></div>`;
+                html += `<div class="block-content"><div contenteditable="true" data-placeholder="Add a note..." onkeydown="handleKeydown(event, '${block.id}', 'note')" oninput="updateBlock('${block.id}', this.textContent, 'note')">${escapeHtml(block.text)}</div></div>`;
                 html += `</div>`;
                 return html;
             }).join('');
 
             // Focus restoration
             setTimeout(() => {
-                const input = document.querySelector(`[data-id="${focusedBlockId}"] input`);
-                if (input) input.focus();
+                const element = document.querySelector(`[data-id="${focusedBlockId}"] [contenteditable="true"]`);
+                if (element) element.focus();
             }, 0);
 
             saveState();
+        }
+
+        // ESCAPE HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         // UPDATE BLOCK
@@ -1104,10 +1118,16 @@
         function handleKeydown(e, id, type) {
             const list = type === 'task' ? tasks : notes;
             const block = list.find(b => b.id === id);
-            const input = e.target;
-            const cursorPos = input.selectionStart;
+            const element = e.target;
 
-            if (e.key === 'Enter') {
+            // Shift+Enter: Allow line break (default behavior)
+            if (e.key === 'Enter' && e.shiftKey) {
+                // Allow default behavior for soft line break
+                return;
+            }
+
+            // Enter alone: Create new block
+            if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
 
                 // Create new block of same type
@@ -1126,23 +1146,36 @@
                 render();
             }
 
-            // Delete with Backspace at start of line
-            if (e.key === 'Backspace' && cursorPos === 0 && list.length > 1) {
-                const idx = list.findIndex(b => b.id === id);
-                if (idx > 0) {
-                    e.preventDefault();
-                    const prevBlock = list[idx - 1];
-                    const prevText = prevBlock.text;
-                    prevBlock.text += block.text;
+            // Backspace at start of line: Merge with previous block
+            if (e.key === 'Backspace' && list.length > 1) {
+                const selection = window.getSelection();
+                const range = selection.getRangeAt(0);
 
-                    list.splice(idx, 1);
-                    focusedBlockId = prevBlock.id;
-                    render();
+                // Check if cursor is at the start of the element
+                if (range.startOffset === 0 && element.childNodes.length === 0) {
+                    const idx = list.findIndex(b => b.id === id);
+                    if (idx > 0) {
+                        e.preventDefault();
+                        const prevBlock = list[idx - 1];
+                        const prevText = prevBlock.text;
+                        prevBlock.text += block.text;
 
-                    setTimeout(() => {
-                        const input = document.querySelector(`[data-id="${prevBlock.id}"] input`);
-                        if (input) input.setSelectionRange(prevText.length, prevText.length);
-                    }, 0);
+                        list.splice(idx, 1);
+                        focusedBlockId = prevBlock.id;
+                        render();
+
+                        setTimeout(() => {
+                            const element = document.querySelector(`[data-id="${prevBlock.id}"] [contenteditable="true"]`);
+                            if (element) {
+                                element.focus();
+                                const range = document.createRange();
+                                range.setStart(element.firstChild || element, prevText.length);
+                                range.collapse(true);
+                                window.getSelection().removeAllRanges();
+                                window.getSelection().addRange(range);
+                            }
+                        }, 0);
+                    }
                 }
             }
         }
