@@ -952,12 +952,10 @@
         <!-- DAILY JOURNAL -->
         <div class="journal-container">
             <div class="command-section">
-                <h3 style="font-size: 18px;">📔 Daily Journal</h3>
-                <div class="editor-container">
-                    <div class="blocks-list" id="journalList"></div>
-                    <div class="notes-button-group" style="margin-top: 15px; justify-content: flex-end;">
-                        <button class="notes-clear" onclick="clearAllJournal()">Clear All</button>
-                    </div>
+                <h3>📔 Daily Journal</h3>
+                <div class="journal-editor" style="min-height: 250px; background: transparent; border: none; color: #e8e8e8; font-size: 14px; font-family: inherit; outline: none; line-height: 1.6; padding: 0; white-space: pre-wrap; word-wrap: break-word; resize: vertical;" id="journalEditor" contenteditable="true" placeholder="Write your daily journal entry here..." oninput="autoSaveJournal()"></div>
+                <div class="notes-button-group" style="margin-top: 15px; justify-content: flex-end;">
+                    <button class="notes-clear" onclick="clearJournal()">Clear</button>
                 </div>
             </div>
         </div>
@@ -1390,94 +1388,21 @@
             }
         }
 
-        // ========== DAILY JOURNAL (BULLET-BASED) ==========
-        let journalBlocks = [{ id: 'j0', type: 'bullet', text: '' }];
-        let focusedJournalId = 'j0';
+        // ========== DAILY JOURNAL (SIMPLE TEXT) ==========
+        let journalAutoSaveTimer;
 
-        function renderJournal() {
-            const list = document.getElementById('journalList');
-            list.innerHTML = journalBlocks.map((block, idx) => {
-                let html = `<div class="block type-bullet" data-id="${block.id}">`;
-                html += `<span class="bullet-dash">–</span>`;
-                html += `<div class="block-content"><div contenteditable="true" data-placeholder="Add a journal note..." onkeydown="handleJournalKeydown(event, '${block.id}')" oninput="updateJournalBlock('${block.id}', this.textContent)">${escapeHtml(block.text)}</div></div>`;
-                html += `</div>`;
-                return html;
-            }).join('');
-
-            setTimeout(() => {
-                const element = document.querySelector(`[data-id="${focusedJournalId}"] [contenteditable="true"]`);
-                if (element) element.focus();
-            }, 0);
-
-            saveJournal();
-        }
-
-        function updateJournalBlock(id, text) {
-            const block = journalBlocks.find(b => b.id === id);
-            if (block) {
-                block.text = text;
-            }
-        }
-
-        function handleJournalKeydown(e, id) {
-            const block = journalBlocks.find(b => b.id === id);
-            const element = e.target;
-
-            if (e.key === 'Enter' && e.shiftKey) {
-                return;
-            }
-
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                const newId = 'j' + Date.now();
-                const blockIdx = journalBlocks.indexOf(block);
-                const newBlock = {
-                    id: newId,
-                    type: 'bullet',
-                    text: ''
-                };
-                journalBlocks.splice(blockIdx + 1, 0, newBlock);
-                focusedJournalId = newId;
-                renderJournal();
-            }
-
-            if (e.key === 'Backspace' && journalBlocks.length > 1) {
-                const selection = window.getSelection();
-                const range = selection.getRangeAt(0);
-
-                if (range.startOffset === 0 && element.childNodes.length === 0) {
-                    const idx = journalBlocks.findIndex(b => b.id === id);
-                    if (idx > 0) {
-                        e.preventDefault();
-                        const prevBlock = journalBlocks[idx - 1];
-                        const prevText = prevBlock.text;
-                        prevBlock.text += block.text;
-
-                        journalBlocks.splice(idx, 1);
-                        focusedJournalId = prevBlock.id;
-                        renderJournal();
-
-                        setTimeout(() => {
-                            const el = document.querySelector(`[data-id="${prevBlock.id}"] [contenteditable="true"]`);
-                            if (el) {
-                                el.focus();
-                                const r = document.createRange();
-                                r.setStart(el.firstChild || el, prevText.length);
-                                r.collapse(true);
-                                window.getSelection().removeAllRanges();
-                                window.getSelection().addRange(r);
-                            }
-                        }, 0);
-                    }
-                }
-            }
+        function autoSaveJournal() {
+            clearTimeout(journalAutoSaveTimer);
+            journalAutoSaveTimer = setTimeout(() => {
+                saveJournal();
+            }, 1000);
         }
 
         function saveJournal() {
             const today = new Date().toISOString().split('T')[0];
             const journalData = {
                 date: today,
-                blocks: journalBlocks,
+                content: document.getElementById('journalEditor').textContent,
                 timestamp: new Date().toISOString()
             };
             localStorage.setItem('journal_' + today, JSON.stringify(journalData));
@@ -1488,25 +1413,23 @@
             const today = new Date().toISOString().split('T')[0];
             const saved = localStorage.getItem('journal_' + today);
             if (saved) {
-                journalBlocks = JSON.parse(saved).blocks;
-            } else {
-                journalBlocks = [{ id: 'j0', type: 'bullet', text: '' }];
+                const data = JSON.parse(saved);
+                document.getElementById('journalEditor').textContent = data.content || '';
             }
-            renderJournal();
         }
 
-        function clearAllJournal() {
-            if (confirm('Clear all journal entries? This will be archived.')) {
-                if (journalBlocks.some(b => b.text.trim())) {
+        function clearJournal() {
+            if (confirm('Clear journal entry? This will be archived.')) {
+                const content = document.getElementById('journalEditor').textContent;
+                if (content.trim()) {
                     syncToGoogleSheets('Daily Journal', {
-                        action: 'clear_all',
-                        blocks: journalBlocks,
+                        action: 'clear',
+                        content: content,
                         clearedDate: new Date().toISOString().split('T')[0]
                     });
                 }
-                journalBlocks = [{ id: 'j0', type: 'bullet', text: '' }];
-                focusedJournalId = 'j0';
-                renderJournal();
+                document.getElementById('journalEditor').textContent = '';
+                saveJournal();
             }
         }
 
