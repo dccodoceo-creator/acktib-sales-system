@@ -817,6 +817,55 @@
             grid-column: 1 / -1;
         }
 
+        /* QUICK NOTES BOXES */
+        .quick-notes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .quick-note-box {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 16px;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quick-note-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #a8a8a8;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .quick-note-content {
+            background: transparent;
+            border: none;
+            color: #e8e8e8;
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            line-height: 1.4;
+            padding: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            flex: 1;
+            resize: none;
+        }
+
+        .quick-note-content::placeholder {
+            color: #666666;
+        }
+
+        .quick-note-content:focus {
+            outline: none;
+        }
+
         @media (max-width: 900px) {
             .grid {
                 grid-template-columns: 1fr;
@@ -924,27 +973,23 @@
             </div>
         </div>
 
-        <!-- KEY POINTS -->
+        <!-- QUICK NOTES -->
         <div class="key-points-container">
             <div class="command-section">
-                <h3>🎯 Today's 3 Key Points</h3>
-                <div class="key-points-grid" id="keyPointsGrid">
-                    <div class="key-point-card">
-                        <div class="key-point-number">1</div>
-                        <input type="text" class="key-point-input" id="keyPoint1" placeholder="First priority...">
+                <h3>📝 Quick Insights</h3>
+                <div class="quick-notes-grid">
+                    <div class="quick-note-box">
+                        <div class="quick-note-title">🎯 Important Points</div>
+                        <div class="quick-note-content" id="importantPoints" contenteditable="true" placeholder="What's important today?" oninput="autoSaveNotes()"></div>
                     </div>
-                    <div class="key-point-card">
-                        <div class="key-point-number">2</div>
-                        <input type="text" class="key-point-input" id="keyPoint2" placeholder="Second priority...">
+                    <div class="quick-note-box">
+                        <div class="quick-note-title">🔍 Observations & Patterns</div>
+                        <div class="quick-note-content" id="observationsPatterns" contenteditable="true" placeholder="What patterns do you notice?" oninput="autoSaveNotes()"></div>
                     </div>
-                    <div class="key-point-card">
-                        <div class="key-point-number">3</div>
-                        <input type="text" class="key-point-input" id="keyPoint3" placeholder="Third priority...">
+                    <div class="quick-note-box">
+                        <div class="quick-note-title">📓 Free Notes</div>
+                        <div class="quick-note-content" id="freeNotes" contenteditable="true" placeholder="Any thoughts or ideas..." oninput="autoSaveNotes()"></div>
                     </div>
-                </div>
-                <div class="key-points-buttons" style="margin-top: 15px;">
-                    <button class="notes-clear" onclick="clearKeyPoints()">Clear</button>
-                    <button class="notes-add" onclick="saveKeyPoints()">Save</button>
                 </div>
             </div>
         </div>
@@ -1406,41 +1451,37 @@
             }
         }
 
-        // ========== 3 KEY POINTS ==========
-        function saveKeyPoints() {
+        // ========== QUICK INSIGHTS NOTES ==========
+        let notesAutoSaveTimer;
+
+        function autoSaveNotes() {
+            clearTimeout(notesAutoSaveTimer);
+            notesAutoSaveTimer = setTimeout(() => {
+                saveQuickNotes();
+            }, 1000);
+        }
+
+        function saveQuickNotes() {
             const today = new Date().toISOString().split('T')[0];
-            const keyPointsData = {
+            const notesData = {
                 date: today,
-                keyPoints: [
-                    document.getElementById('keyPoint1').value,
-                    document.getElementById('keyPoint2').value,
-                    document.getElementById('keyPoint3').value
-                ],
+                importantPoints: document.getElementById('importantPoints').textContent,
+                observationsPatterns: document.getElementById('observationsPatterns').textContent,
+                freeNotes: document.getElementById('freeNotes').textContent,
                 timestamp: new Date().toISOString()
             };
-            localStorage.setItem('keyPoints_' + today, JSON.stringify(keyPointsData));
-            syncToGoogleSheets('Daily Key Points', keyPointsData);
-            alert('✅ Key points saved');
+            localStorage.setItem('quickNotes_' + today, JSON.stringify(notesData));
+            syncToGoogleSheets('Quick Insights Notes', notesData);
         }
 
-        function loadKeyPoints() {
+        function loadQuickNotes() {
             const today = new Date().toISOString().split('T')[0];
-            const saved = localStorage.getItem('keyPoints_' + today);
+            const saved = localStorage.getItem('quickNotes_' + today);
             if (saved) {
                 const data = JSON.parse(saved);
-                if (data.keyPoints && data.keyPoints.length >= 3) {
-                    document.getElementById('keyPoint1').value = data.keyPoints[0];
-                    document.getElementById('keyPoint2').value = data.keyPoints[1];
-                    document.getElementById('keyPoint3').value = data.keyPoints[2];
-                }
-            }
-        }
-
-        function clearKeyPoints() {
-            if (confirm('Clear key points?')) {
-                document.getElementById('keyPoint1').value = '';
-                document.getElementById('keyPoint2').value = '';
-                document.getElementById('keyPoint3').value = '';
+                document.getElementById('importantPoints').textContent = data.importantPoints || '';
+                document.getElementById('observationsPatterns').textContent = data.observationsPatterns || '';
+                document.getElementById('freeNotes').textContent = data.freeNotes || '';
             }
         }
 
@@ -1551,7 +1592,7 @@
             loadStats();
             loadState();
             loadJournal();
-            loadKeyPoints();
+            loadQuickNotes();
             renderCalendar();
 
             setInterval(updateTime, 1000);
