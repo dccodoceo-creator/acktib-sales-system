@@ -583,19 +583,29 @@
             background: #252525;
         }
 
-        .calendar-day.has-history {
+        .calendar-day {
             position: relative;
         }
 
-        .calendar-day.has-history::after {
+        .calendar-day::before {
             content: '';
             position: absolute;
-            width: 6px;
-            height: 6px;
-            background: #e4a834;
+            width: 8px;
+            height: 8px;
+            background: transparent;
+            border: 2px solid #686868;
             border-radius: 50%;
-            bottom: 4px;
-            right: 4px;
+            top: 4px;
+            left: 4px;
+        }
+
+        .calendar-day.has-history::before {
+            background: #e4a834;
+            border-color: #e4a834;
+        }
+
+        .calendar-day.other-month::before {
+            border-color: #454545;
         }
 
         /* HISTORY MODAL */
