@@ -79,10 +79,28 @@
             background: #0f0f0f;
             color: #686868;
         }
+        .day-cell.holiday {
+            background: #3a1a1a;
+            border: 1px solid #ff6b6b;
+            color: #ff9999;
+        }
+        .day-cell.holiday:hover {
+            background: #4a2a2a;
+        }
         .day-number {
             font-weight: 600;
             margin-bottom: 4px;
             font-size: 13px;
+        }
+        .holiday-label {
+            font-size: 7px;
+            color: #ff6b6b;
+            margin-top: 2px;
+            text-align: center;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1;
         }
         .day-activities {
             font-size: 11px;
@@ -321,6 +339,23 @@
         let currentDate = new Date();
         let selectedDate = null;
 
+        // Chilean Holidays 2026
+        const chileanHolidays = {
+            '2026-05-01': 'Día del Trabajo',
+            '2026-05-21': 'Glorias Navales',
+            '2026-06-21': 'Pueblos Indígenas',
+            '2026-06-29': 'San Pedro y San Pablo',
+            '2026-07-16': 'Virgen del Carmen',
+            '2026-08-15': 'Asunción de la Virgen',
+            '2026-09-18': 'Independencia',
+            '2026-09-19': 'Glorias del Ejército',
+            '2026-10-12': 'Encuentro de Dos Mundos',
+            '2026-10-31': 'Iglesias Evangélicas',
+            '2026-11-01': 'Día de Todos los Santos',
+            '2026-12-08': 'Inmaculada Concepción',
+            '2026-12-25': 'Navidad'
+        };
+
         function renderCalendar() {
             const year = currentDate.getFullYear();
             const month = currentDate.getMonth();
@@ -360,6 +395,8 @@
                 const cell = document.createElement('div');
                 const date = new Date(year, month, day);
                 const dateStr = date.toISOString().split('T')[0];
+                const isHoliday = dateStr in chileanHolidays;
+                const holidayName = chileanHolidays[dateStr] || '';
 
                 cell.className = 'day-cell';
                 if (date.toDateString() === new Date().toDateString()) {
@@ -368,9 +405,19 @@
                 if (date.getDay() === 0 || date.getDay() === 6) {
                     cell.classList.add('weekend');
                 }
+                if (isHoliday) {
+                    cell.classList.add('holiday');
+                }
 
-                cell.innerHTML = `<div class="day-number">${day}</div><div class="day-activities" id="activities-${dateStr}"></div>`;
+                let dayContent = `<div class="day-number">${day}</div>`;
+                if (isHoliday && holidayName) {
+                    dayContent += `<div class="holiday-label">${holidayName}</div>`;
+                }
+                dayContent += `<div class="day-activities" id="activities-${dateStr}"></div>`;
+
+                cell.innerHTML = dayContent;
                 cell.onclick = () => openDayModal(dateStr);
+                cell.title = holidayName;
                 grid.appendChild(cell);
             }
 
