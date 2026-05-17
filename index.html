@@ -541,10 +541,16 @@
         }
 
         .calendar-day.today {
-            background: #888888;
-            color: #000;
-            font-weight: 600;
-            border-color: #888888;
+            background: transparent;
+            color: #e4a834;
+            font-weight: 700;
+            border: 2px solid #e4a834;
+            box-shadow: inset 0 0 0 1px #e4a834;
+        }
+
+        .calendar-day.today::before {
+            border-color: #e4a834;
+            background: #e4a834;
         }
 
         .calendar-day.has-activity {
