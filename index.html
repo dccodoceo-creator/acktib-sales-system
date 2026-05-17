@@ -760,6 +760,63 @@
             justify-content: flex-end;
         }
 
+        /* KEY POINTS SECTION */
+        .key-points-container {
+            margin-bottom: 40px;
+        }
+
+        .key-points-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .key-point-card {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .key-point-number {
+            background: #e4a834;
+            color: #1c1c1e;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .key-point-input {
+            background: transparent;
+            border: none;
+            color: #e8e8e8;
+            font-size: 13px;
+            font-family: inherit;
+            outline: none;
+            line-height: 1.4;
+            padding: 0;
+        }
+
+        .key-point-input::placeholder {
+            color: #666666;
+        }
+
+        .key-points-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            grid-column: 1 / -1;
+        }
+
         @media (max-width: 900px) {
             .grid {
                 grid-template-columns: 1fr;
@@ -863,6 +920,31 @@
                 <div class="journal-buttons">
                     <button class="notes-clear" onclick="clearJournal()">Clear</button>
                     <button class="notes-add" onclick="saveJournal()">Save</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- KEY POINTS -->
+        <div class="key-points-container">
+            <div class="command-section">
+                <h3>🎯 Today's 3 Key Points</h3>
+                <div class="key-points-grid" id="keyPointsGrid">
+                    <div class="key-point-card">
+                        <div class="key-point-number">1</div>
+                        <input type="text" class="key-point-input" id="keyPoint1" placeholder="First priority...">
+                    </div>
+                    <div class="key-point-card">
+                        <div class="key-point-number">2</div>
+                        <input type="text" class="key-point-input" id="keyPoint2" placeholder="Second priority...">
+                    </div>
+                    <div class="key-point-card">
+                        <div class="key-point-number">3</div>
+                        <input type="text" class="key-point-input" id="keyPoint3" placeholder="Third priority...">
+                    </div>
+                </div>
+                <div class="key-points-buttons" style="margin-top: 15px;">
+                    <button class="notes-clear" onclick="clearKeyPoints()">Clear</button>
+                    <button class="notes-add" onclick="saveKeyPoints()">Save</button>
                 </div>
             </div>
         </div>
@@ -1324,6 +1406,44 @@
             }
         }
 
+        // ========== 3 KEY POINTS ==========
+        function saveKeyPoints() {
+            const today = new Date().toISOString().split('T')[0];
+            const keyPointsData = {
+                date: today,
+                keyPoints: [
+                    document.getElementById('keyPoint1').value,
+                    document.getElementById('keyPoint2').value,
+                    document.getElementById('keyPoint3').value
+                ],
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('keyPoints_' + today, JSON.stringify(keyPointsData));
+            syncToGoogleSheets('Daily Key Points', keyPointsData);
+            alert('✅ Key points saved');
+        }
+
+        function loadKeyPoints() {
+            const today = new Date().toISOString().split('T')[0];
+            const saved = localStorage.getItem('keyPoints_' + today);
+            if (saved) {
+                const data = JSON.parse(saved);
+                if (data.keyPoints && data.keyPoints.length >= 3) {
+                    document.getElementById('keyPoint1').value = data.keyPoints[0];
+                    document.getElementById('keyPoint2').value = data.keyPoints[1];
+                    document.getElementById('keyPoint3').value = data.keyPoints[2];
+                }
+            }
+        }
+
+        function clearKeyPoints() {
+            if (confirm('Clear key points?')) {
+                document.getElementById('keyPoint1').value = '';
+                document.getElementById('keyPoint2').value = '';
+                document.getElementById('keyPoint3').value = '';
+            }
+        }
+
         // ========== DAILY COMMAND CENTER ==========
 
         let currentCalendarDate = new Date();
@@ -1431,6 +1551,7 @@
             loadStats();
             loadState();
             loadJournal();
+            loadKeyPoints();
             renderCalendar();
 
             setInterval(updateTime, 1000);
