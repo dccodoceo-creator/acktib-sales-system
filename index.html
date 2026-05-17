@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACKTIB Sales System - Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,7 +13,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #050505 0%, #0a0a0a 100%);
             min-height: 100vh;
             padding: 20px;
@@ -326,7 +327,7 @@
             font-size: 16px;
             min-height: 100px;
             resize: vertical;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             line-height: 1.8;
         }
 
@@ -1072,7 +1073,7 @@
             // Render Tasks
             const tasksList = document.getElementById('tasksList');
             tasksList.innerHTML = tasks.map((block, idx) => {
-                let html = `<div class="block type-todo" data-id="${block.id}">`;
+                let html = `<div class="block type-todo ${block.checked ? 'checked' : ''}" data-id="${block.id}">`;
                 html += `<div class="checkbox ${block.checked ? 'checked' : ''}" onclick="toggleCheckbox('${block.id}', 'task')"></div>`;
                 html += `<div class="block-content"><div contenteditable="true" data-placeholder="Add a task..." onkeydown="handleKeydown(event, '${block.id}', 'task')" oninput="updateBlock('${block.id}', this.textContent, 'task')">${escapeHtml(block.text)}</div></div>`;
                 html += `</div>`;
