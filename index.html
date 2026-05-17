@@ -590,13 +590,14 @@
         .calendar-day::before {
             content: '';
             position: absolute;
-            width: 8px;
-            height: 8px;
+            width: 7px;
+            height: 7px;
             background: transparent;
-            border: 2px solid #686868;
+            border: 1.5px solid #686868;
             border-radius: 50%;
-            top: 4px;
-            left: 4px;
+            top: 3px;
+            left: 3px;
+            z-index: 10;
         }
 
         .calendar-day.has-history::before {
