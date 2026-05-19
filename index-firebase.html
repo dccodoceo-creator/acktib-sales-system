@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACKTIB Sales System - Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #f5f5f5;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #a8a8a8;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .header-meta {
+            font-size: 13px;
+            color: #686868;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .header-clock {
+            font-weight: 600;
+            color: #00d4ff;
+        }
+
+        /* QUICK STATS SECTION */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-mini-card {
+            background: #2b2b2b;
+            border: 1px solid #454545;
+            border-left: 3px solid #00d4ff;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-mini-label {
+            font-size: 11px;
+            color: #868686;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .stat-mini-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #00d4ff;
+        }
+
+        .stat-mini-subtext {
+            font-size: 11px;
+            color: #686868;
+            margin-top: 6px;
+        }
+
+        /* QUICK ACTIONS */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: #000;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 212, 255, 0.3);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: #2b2b2b;
+            border: 1px solid #454545;
+            border-radius: 12px;
+            padding: 25px;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            border-color: #606060;
+            background: #323232;
+            transform: translateY(-2px);
+        }
+
+        .card-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #f5f5f5;
+            margin-bottom: 8px;
+        }
+
+        .card-description {
+            font-size: 13px;
+            color: #a8a8a8;
+            line-height: 1.6;
+            flex: 1;
+            margin-bottom: 15px;
+        }
+
+        .card-features {
+            font-size: 11px;
+            color: #868686;
+            padding-top: 12px;
+            border-top: 1px solid #3a3a3a;
+        }
+
+        .card-feature {
+            margin-bottom: 4px;
+        }
+
+        .card-button {
+            display: inline-block;
+            background: #606060;
+            color: #f5f5f5;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .card:hover .card-button {
+            background: #707070;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #f5f5f5;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #454545;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .info-box {
+            background: #2b2b2b;
+            border: 1px solid #454545;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #f5f5f5;
+            margin-bottom: 12px;
+        }
+
+        .info-content {
+            font-size: 13px;
+            color: #a8a8a8;
+            line-height: 1.8;
+        }
+
+        .info-content strong {
+            color: #d0d0d0;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .timeline-item {
+            background: #3a3a3a;
+            border-left: 3px solid #606060;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .timeline-time {
+            font-size: 12px;
+            font-weight: 600;
+            color: #606060;
+            margin-bottom: 6px;
+        }
+
+        .timeline-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #f5f5f5;
+            margin-bottom: 4px;
+        }
+
+        .timeline-description {
+            font-size: 12px;
+            color: #a8a8a8;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #3a4a3a;
+            color: #9adc9a;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #686868;
+            font-size: 12px;
+            border-top: 1px solid #454545;
+            margin-top: 40px;
+        }
+
+        /* DAILY COMMAND CENTER */
+        .command-center {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 40px;
+            background: #2b2b2b;
+            border: 1px solid #454545;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .command-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #f5f5f5;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #00d4ff;
+        }
+
+        /* TASKS SECTION */
+        .tasks-container {
+            margin-bottom: 20px;
+        }
+
+        .task-input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .task-input-group input {
+            flex: 1;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            color: #f5f5f5;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .task-input-group input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: #252525;
+        }
+
+        .task-input-group button {
+            background: #00d4ff;
+            color: #000;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .task-input-group button:hover {
+            background: #00b8d4;
+        }
+
+        .tasks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .task-item input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+        }
+
+        .task-text {
+            flex: 1;
+            font-size: 13px;
+            color: #a8a8a8;
+        }
+
+        .task-item input[type="checkbox"]:checked + .task-text {
+            text-decoration: line-through;
+            color: #686868;
+        }
+
+        .task-delete {
+            background: #454545;
+            border: none;
+            color: #a8a8a8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.3s;
+        }
+
+        .task-delete:hover {
+            background: #ff5555;
+            color: #fff;
+        }
+
+        .empty-message {
+            font-size: 12px;
+            color: #686868;
+            text-align: center;
+            padding: 15px;
+            font-style: italic;
+        }
+
+        /* NOTES SECTION */
+        .notes-container {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #3a3a3a;
+        }
+
+        .notes-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .notes-input-group textarea {
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            color: #f5f5f5;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            min-height: 60px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .notes-input-group textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: #252525;
+        }
+
+        .notes-button-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .notes-button-group button {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .notes-add {
+            background: #00d4ff;
+            color: #000;
+        }
+
+        .notes-add:hover {
+            background: #00b8d4;
+        }
+
+        .notes-clear {
+            background: #454545;
+            color: #a8a8a8;
+        }
+
+        .notes-clear:hover {
+            background: #555555;
+        }
+
+        .notes-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .note-item {
+            padding: 10px 12px;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #a8a8a8;
+            line-height: 1.4;
+        }
+
+        /* MINI CALENDAR */
+        .mini-calendar {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-header h3 {
+            margin: 0;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 5px;
+        }
+
+        .calendar-nav button {
+            background: #454545;
+            border: none;
+            color: #a8a8a8;
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .calendar-nav button:hover {
+            background: #00d4ff;
+            color: #000;
+        }
+
+        .calendar-month {
+            font-size: 13px;
+            font-weight: 600;
+            color: #f5f5f5;
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        .calendar-weekday {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: #686868;
+            padding: 5px 0;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #3a3a3a;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #a8a8a8;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .calendar-day:hover {
+            border-color: #00d4ff;
+            background: #252525;
+        }
+
+        .calendar-day.other-month {
+            color: #454545;
+        }
+
+        .calendar-day.today {
+            background: #00d4ff;
+            color: #000;
+            font-weight: 600;
+            border-color: #00d4ff;
+        }
+
+        .calendar-day.has-activity {
+            border-color: #00d4ff;
+            background: #1a3a3a;
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .command-center {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 ACKTIB Sales System</h1>
+            <p>Centralized hub for your sales process, metrics, and personal development</p>
+            <div class="header-meta">
+                <span>Integrated commercial management system</span>
+                <span class="header-clock" id="currentTime">--:--</span>
+            </div>
+        </div>
+
+        <!-- QUICK STATS -->
+        <div class="quick-stats" id="quickStats">
+            <div class="stat-mini-card">
+                <div class="stat-mini-label">📞 Today's Calls</div>
+                <div class="stat-mini-value" id="todaysCalls">0</div>
+                <div class="stat-mini-subtext">this week: <span id="weekCalls">0</span></div>
+            </div>
+            <div class="stat-mini-card">
+                <div class="stat-mini-label">💬 Today's Talks</div>
+                <div class="stat-mini-value" id="todaysTalks">0</div>
+                <div class="stat-mini-subtext">this week: <span id="weekTalks">0</span></div>
+            </div>
+            <div class="stat-mini-card">
+                <div class="stat-mini-label">📋 Today's Proposals</div>
+                <div class="stat-mini-value" id="todaysProposals">0</div>
+                <div class="stat-mini-subtext">this week: <span id="weekProposals">0</span></div>
+            </div>
+            <div class="stat-mini-card">
+                <div class="stat-mini-label">📊 Total Entries</div>
+                <div class="stat-mini-value" id="totalEntries">0</div>
+                <div class="stat-mini-subtext">all data</div>
+            </div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="quick-actions">
+            <a href="daily_notifications.html" class="action-btn">⏰ Plan AM/PM Today</a>
+            <a href="metrics_dashboard.html" class="action-btn">📊 Register Metrics</a>
+            <a href="journal_system.html" class="action-btn">📝 Daily Journal</a>
+            <a href="calendar_dashboard.html" class="action-btn">📅 View Calendar</a>
+        </div>
+
+        <!-- DAILY COMMAND CENTER -->
+        <div class="command-center">
+            <!-- LEFT: Tasks & Notes -->
+            <div>
+                <!-- TASKS -->
+                <div class="command-section">
+                    <h3>✅ Today's Tasks</h3>
+                    <div class="tasks-container">
+                        <div class="task-input-group">
+                            <input type="text" id="taskInput" placeholder="Add a task...">
+                            <button onclick="addTask()">Add</button>
+                        </div>
+                        <div class="tasks-list" id="tasksList"></div>
+                    </div>
+                </div>
+
+                <!-- NOTES -->
+                <div class="command-section">
+                    <h3>📝 Daily Notes</h3>
+                    <div class="notes-container">
+                        <div class="notes-input-group">
+                            <textarea id="noteInput" placeholder="Quick notes, reminders, ideas..."></textarea>
+                            <div class="notes-button-group">
+                                <button class="notes-add" onclick="addNote()">+ Add Note</button>
+                                <button class="notes-clear" onclick="clearNotes()">Clear All</button>
+                            </div>
+                        </div>
+                        <div class="notes-list" id="notesList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Mini Calendar -->
+            <div class="mini-calendar">
+                <div class="command-section">
+                    <div class="calendar-header">
+                        <div>
+                            <div class="calendar-month" id="calendarMonth"></div>
+                        </div>
+                        <div class="calendar-nav">
+                            <button onclick="prevMonth()">←</button>
+                            <button onclick="todayMonth()">Today</button>
+                            <button onclick="nextMonth()">→</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="calendar-weekdays">
+                    <div class="calendar-weekday">Sun</div>
+                    <div class="calendar-weekday">Mon</div>
+                    <div class="calendar-weekday">Tue</div>
+                    <div class="calendar-weekday">Wed</div>
+                    <div class="calendar-weekday">Thu</div>
+                    <div class="calendar-weekday">Fri</div>
+                    <div class="calendar-weekday">Sat</div>
+                </div>
+                <div class="calendar-days" id="calendarDays"></div>
+            </div>
+        </div>
+
+        <!-- MAIN TOOLS -->
+        <div class="section">
+            <h2 class="section-title">🔧 Main Tools</h2>
+            <div class="grid">
+                <!-- Calendar Dashboard -->
+                <a href="calendar_dashboard.html" class="card">
+                    <div class="card-icon">📅</div>
+                    <div class="card-title">Calendar Dashboard</div>
+                    <div class="card-description">Monthly view of your activity. Click any day to view/edit data.</div>
+                    <div class="card-features">
+                        <div class="card-feature">✓ Daily Task checks (AM/PM)</div>
+                        <div class="card-feature">✓ Completion % per day</div>
+                        <div class="card-feature">✓ Visual indicators</div>
+                        <div class="card-feature">✓ Edit/view modal</div>
+                    </div>
+                    <div class="card-button">Open →</div>
+                </a>
+
+                <!-- Notifications -->
+                <a href="daily_notifications.html" class="card">
+                    <div class="card-icon">⏰</div>
+                    <div class="card-title">Daily Notifications</div>
+                    <div class="card-description">Automatic notifications at 9:00 AM and 17:45 hrs (Mon-Fri).</div>
+                    <div class="card-features">
+                        <div class="card-feature">✓ Real-time clock</div>
+                        <div class="card-feature">✓ Next notification visible</div>
+                        <div class="card-feature">✓ Daily history</div>
+                        <div class="card-feature">✓ Toggle on/off</div>
+                    </div>
+                    <div class="card-button">Open →</div>
+                </a>
+
+                <!-- Metrics Dashboard -->
+                <a href="metrics_dashboard.html" class="card">
+                    <div class="card-icon">📊</div>
+                    <div class="card-title">Metrics Dashboard</div>
+                    <div class="card-description">Weekly, monthly, and personal metrics. Real-time KPIs.</div>
+                    <div class="card-features">
+                        <div class="card-feature">✓ Weekly (calls, talks)</div>
+                        <div class="card-feature">✓ Monthly (KPIs, revenue)</div>
+                        <div class="card-feature">✓ Personal (skills)</div>
+                        <div class="card-feature">✓ Dynamic charts</div>
+                    </div>
+                    <div class="card-button">Open →</div>
+                </a>
+
+                <!-- Journal System -->
+                <a href="journal_system.html" class="card">
+                    <div class="card-icon">📖</div>
+                    <div class="card-title">Journal System</div>
+                    <div class="card-description">Deep reflection: Daily (Mon-Fri), Friday (closing), and Sunday (prep).</div>
+                    <div class="card-features">
+                        <div class="card-feature">✓ Daily Journal</div>
+                        <div class="card-feature">✓ Friday Journal</div>
+                        <div class="card-feature">✓ Sunday Journal</div>
+                        <div class="card-feature">✓ History by type</div>
+                    </div>
+                    <div class="card-button">Open →</div>
+                </a>
+
+                <!-- Playbook Objeciones -->
+                <a href="playbook_objections.html" class="card">
+                    <div class="card-icon">⚠️</div>
+                    <div class="card-title">Objections Playbook</div>
+                    <div class="card-description">Database of objections with effective scripts and success rates.</div>
+                    <div class="card-features">
+                        <div class="card-feature">✓ Complete database</div>
+                        <div class="card-feature">✓ Scripts per objection</div>
+                        <div class="card-feature">✓ Statistics (top 3)</div>
+                        <div class="card-feature">✓ Success rate improvement</div>
+                    </div>
+                    <div class="card-button">Open →</div>
+                </a>
+
+                <!-- Personal Tracker -->
+                <a href="personal_tracker.html" class="card">
+                    <div class="card-icon">📈</div>
+                    <div class="card-title">Personal Tracker</div>
+                    <div class="card-description">Your evolution as a salesperson. Skills, feedback, and month-to-month progress.</div>
+                    <div class="card-features">
+                        <div class="card-feature">✓ Skills in progress</div>
+                        <div class="card-feature">✓ Feedback (boss + self)</div>
+                        <div class="card-feature">✓ Evolution charts</div>
+                        <div class="card-feature">✓ Strength + weakness</div>
+                    </div>
+                    <div class="card-button">Open →</div>
+                </a>
+            </div>
+        </div>
+
+        <!-- WORKFLOW -->
+        <div class="section">
+            <h2 class="section-title">📅 Your Weekly Workflow</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">09:00 AM (Monday-Friday)</div>
+                    <div class="timeline-title">Plan AM</div>
+                    <div class="timeline-description">Define 3 priorities + daily checklist. Automatic notification → Daily Notifications</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">During the day</div>
+                    <div class="timeline-title">Execution + Logging</div>
+                    <div class="timeline-description">Make calls, add talks, etc. You can register in Calendar Dashboard or Metrics at end of day</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">17:45 PM (Monday-Friday)</div>
+                    <div class="timeline-title">Review PM</div>
+                    <div class="timeline-description">Reflect: what you completed, clients contacted, learnings. Automatic notification</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">Afternoon (Mon-Fri)</div>
+                    <div class="timeline-title">Daily Journal (optional)</div>
+                    <div class="timeline-description">Record important points, observations, and notes. Build operational memory</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">Friday afternoon</div>
+                    <div class="timeline-title">Friday Journal</div>
+                    <div class="timeline-description">Weekly closing: what went well, challenges, metrics, next focus</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">Sunday</div>
+                    <div class="timeline-title">Sunday Journal + Planning</div>
+                    <div class="timeline-description">Mental preparation, weekly objective, plan by day. Review Personal Tracker</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">Saturday</div>
+                    <div class="timeline-title">OFF 🎉</div>
+                    <div class="timeline-description">No Daily Tasks. You can advance if you want, but no pressure</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INFO BOXES -->
+        <div class="section">
+            <h2 class="section-title">💡 Helpful Information</h2>
+
+            <div class="info-box">
+                <div class="info-title">🎯 Where to Start?</div>
+                <div class="info-content">
+                    <strong>1. Calendar Dashboard:</strong> Your main view. Navigate the month, see what's missing.<br>
+                    <strong>2. Daily Notifications:</strong> Keep open to receive alerts at 9am and 5:45pm.<br>
+                    <strong>3. Metrics Dashboard:</strong> End of week, review what happened vs goals.<br>
+                    <strong>4. Journal System:</strong> For deep reflection (Friday + Sunday especially).<br>
+                    <strong>5. Playbook:</strong> Add new objections to improve your scripts.
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-title">📊 KPIs to Track</div>
+                <div class="info-content">
+                    <strong>Daily:</strong> Calls, responses (ratio), talks, proposals, average time<br>
+                    <strong>Weekly:</strong> Total calls (goal 50), talks (goal 4), talk→proposal conversion<br>
+                    <strong>Monthly:</strong> Total calls (goal 200), talks (goal 16), revenue, trend
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-title">💾 Storage</div>
+                <div class="info-content">
+                    Everything saves to <strong>browser localStorage</strong> (no server). Data persists between sessions. Doesn't require internet (once loaded). If you need to switch browsers, you can export from localStorage.
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-title">🔄 Pipedrive Integration</div>
+                <div class="info-content">
+                    This system is your <strong>personal "business intelligence"</strong>. Pipedrive remains your primary CRM. You can record contacted clients in Daily Task Manager and then transfer to Pipedrive, or vice versa.
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-title">✅ Cowork Setup</div>
+                <div class="info-content">
+                    1. Create new workflow<br>
+                    2. Add task "Open Daily Notifications" (9:00am)<br>
+                    3. Add task "Register metrics" (variable)<br>
+                    4. Add task "Friday Journal" (Friday)<br>
+                    5. Add task "Sunday Journal" (Sunday)<br>
+                    6. Save links to each tool in notes
+                </div>
+            </div>
+        </div>
+
+        <!-- STATUS -->
+        <div class="section">
+            <h2 class="section-title">🚀 System</h2>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <span class="status-badge">v2.0 Enhanced</span>
+                <span class="status-badge">Live Stats</span>
+                <span class="status-badge">LocalStorage</span>
+                <span class="status-badge">Responsive</span>
+                <span class="status-badge">No dependencies</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            ACKTIB Sales System v2.0 • Complete sales and personal development manager • 2026
+        </div>
+    </div>
+
+    <script>
+        // Google Sheets Auto-Sync
+        const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz1Vf-wO7x6dZkO6jmKbb-0EptIks5phXg_7vaTplJ2DPwPMGtxnvH9i6FehDm5h3KF3w/exec';
+        function syncToGoogleSheets(toolName, data) {
+            const payload = { tool: toolName, timestamp: new Date().toISOString(), data: data }
+
+
+        // ========== FIREBASE CONFIGURATION ==========
+        const firebaseConfig = {
+            apiKey: "AIzaSyDU4I1fN4qXC8KSZA7Z29dVRh1gkrzGH8",
+            authDomain: "acktib-dcdfa.firebaseapp.com",
+            databaseURL: "https://acktib-dcdfa-default-rtdb.firebasebaseio.com",
+            projectId: "acktib-dcdfa",
+            storageBucket: "acktib-dcdfa.appspot.com",
+            messagingSenderId: "865204956727",
+            appId: "1:865204956727:web:12843ca3605ffc641f59b2",
+            measurementId: "G-S0ZVV7ER56"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        
+        // Generate or get device ID
+        let DEVICE_ID = localStorage.getItem('device_id');
+        if (!DEVICE_ID) {
+            DEVICE_ID = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('device_id', DEVICE_ID);
+        }
+
+        // Sync configuration
+        const SYNC_INTERVAL = 5 * 60 * 1000; // 5 minutes
+        let lastSyncTime = 0;
+        let syncInProgress = false;
+        const userId = 'user_' + Math.random().toString(36).substr(2, 9); // Unique user per browser
+
+        // ========== FIREBASE SYNC FUNCTIONS ==========
+        async function syncToFirebase(dataType, data) {
+            if (syncInProgress) return; // Prevent simultaneous syncs
+            syncInProgress = true;
+            
+            try {
+                const timestamp = new Date().toISOString();
+                const syncData = {
+                    ...data,
+                    timestamp: timestamp,
+                    deviceId: DEVICE_ID,
+                    syncedAt: firebase.database.ServerValue.TIMESTAMP
+                };
+                
+                const path = `users/${userId}/${dataType}`;
+                await db.ref(path).set(syncData);
+                lastSyncTime = Date.now();
+                console.log(`✅ Synced ${dataType} to Firebase`);
+            } catch (e) {
+                console.log(`⚠️ Firebase sync error for ${dataType}:`, e);
+            } finally {
+                syncInProgress = false;
+            }
+        }
+
+        async function batchSyncToFirebase() {
+            // Sync all current data to Firebase (called every 5 minutes)
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Sync tasks & notes
+            if (tasks && tasks.length > 0) {
+                await syncToFirebase('tasks_blocks', { tasks, timestamp: new Date().toISOString() });
+            }
+            if (notes && notes.length > 0) {
+                await syncToFirebase('notes_blocks', { notes, timestamp: new Date().toISOString() });
+            }
+            
+            // Sync journal
+            const journal = document.getElementById('journalEditor')?.textContent;
+            if (journal && journal.trim()) {
+                await syncToFirebase(`journal_${today}`, { date: today, content: journal });
+            }
+            
+            // Sync quick notes
+            const quickNotes = {
+                importantPoints: document.getElementById('importantPoints')?.textContent || '',
+                observationsPatterns: document.getElementById('observationsPatterns')?.textContent || '',
+                freeNotes: document.getElementById('freeNotes')?.textContent || ''
+            };
+            if (JSON.stringify(quickNotes) !== '{}') {
+                await syncToFirebase(`quickNotes_${today}`, { date: today, ...quickNotes });
+            }
+        }
+
+        function initFirebaseSync() {
+            // Set up real-time listeners from other devices
+            db.ref(`users/${userId}`).on('value', (snapshot) => {
+                if (!snapshot.val()) return;
+                
+                const remoteData = snapshot.val();
+                const today = new Date().toISOString().split('T')[0];
+                
+                // Load tasks from Firebase if newer
+                if (remoteData.tasks_blocks && remoteData.tasks_blocks.timestamp > lastSyncTime) {
+                    tasks = remoteData.tasks_blocks.tasks || tasks;
+                    render();
+                }
+                
+                // Load notes from Firebase if newer
+                if (remoteData.notes_blocks && remoteData.notes_blocks.timestamp > lastSyncTime) {
+                    notes = remoteData.notes_blocks.notes || notes;
+                    render();
+                }
+                
+                // Load journal from Firebase if newer
+                if (remoteData[`journal_${today}`]) {
+                    document.getElementById('journalEditor').textContent = remoteData[`journal_${today}`].content || '';
+                }
+                
+                // Load quick notes from Firebase if newer
+                if (remoteData[`quickNotes_${today}`]) {
+                    const qn = remoteData[`quickNotes_${today}`];
+                    document.getElementById('importantPoints').textContent = qn.importantPoints || '';
+                    document.getElementById('observationsPatterns').textContent = qn.observationsPatterns || '';
+                    document.getElementById('freeNotes').textContent = qn.freeNotes || '';
+                }
+            });
+            
+            // Batch sync every 5 minutes
+            setInterval(batchSyncToFirebase, SYNC_INTERVAL);
+            
+            // Sync on page unload
+            window.addEventListener('beforeunload', () => {
+                batchSyncToFirebase();
+            });
+            
+            console.log('✅ Firebase sync initialized');
+        }
+
+;
+            fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: JSON.stringify(payload) }).catch(e => console.log('Sync:', e));
+        }
+
+        // Update time every second
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('currentTime').textContent = `${hours}:${minutes}`;
+        }
+
+        // Load stats from localStorage
+        function loadStats() {
+            const today = new Date().toISOString().split('T')[0];
+            const metricsData = JSON.parse(localStorage.getItem('dashboard_metrics') || '[]');
+
+            // Calculate today's stats
+            let todaysCalls = 0, todaysTalks = 0, todaysProposals = 0;
+
+            // Calculate week stats (last 7 days)
+            let weekCalls = 0, weekTalks = 0, weekProposals = 0;
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+            metricsData.forEach(entry => {
+                if (entry.date === today) {
+                    todaysCalls += entry.calls || 0;
+                    todaysTalks += entry.talks || 0;
+                    todaysProposals += entry.proposals || 0;
+                }
+
+                if (new Date(entry.date) >= oneWeekAgo) {
+                    weekCalls += entry.calls || 0;
+                    weekTalks += entry.talks || 0;
+                    weekProposals += entry.proposals || 0;
+                }
+            });
+
+            // Update DOM
+            document.getElementById('todaysCalls').textContent = todaysCalls;
+            document.getElementById('todaysTalks').textContent = todaysTalks;
+            document.getElementById('todaysProposals').textContent = todaysProposals;
+            document.getElementById('weekCalls').textContent = weekCalls;
+            document.getElementById('weekTalks').textContent = weekTalks;
+            document.getElementById('weekProposals').textContent = weekProposals;
+            document.getElementById('totalEntries').textContent = metricsData.length;
+        }
+
+        // ========== DAILY COMMAND CENTER ==========
+
+        let currentCalendarDate = new Date();
+
+        // Add Task
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const taskText = input.value.trim();
+            if (!taskText) return;
+
+            let tasks = JSON.parse(localStorage.getItem('daily_tasks') || '[]');
+            tasks.push({
+                id: Date.now(),
+                text: taskText,
+                completed: false,
+                createdDate: new Date().toISOString().split('T')[0],
+                completedDate: null
+            });
+            localStorage.setItem('daily_tasks', JSON.stringify(tasks));
+            input.value = '';
+            renderTasks();
+            syncToGoogleSheets('Daily Tasks', { action: 'add', task: taskText });
+        }
+
+        // Delete Task
+        function deleteTask(id) {
+            let tasks = JSON.parse(localStorage.getItem('daily_tasks') || '[]');
+            tasks = tasks.filter(t => t.id !== id);
+            localStorage.setItem('daily_tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        // Toggle Task
+        function toggleTask(id) {
+            let tasks = JSON.parse(localStorage.getItem('daily_tasks') || '[]');
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                if (task.completed) {
+                    task.completedDate = new Date().toISOString().split('T')[0];
+                }
+                localStorage.setItem('daily_tasks', JSON.stringify(tasks));
+                renderTasks();
+                if (task.completed) {
+                    syncToGoogleSheets('Daily Tasks', { action: 'completed', task: task.text, completedDate: task.completedDate });
+                }
+            }
+        }
+
+        // Render Tasks
+        function renderTasks() {
+            let tasks = JSON.parse(localStorage.getItem('daily_tasks') || '[]');
+            const today = new Date().toISOString().split('T')[0];
+
+            // Filter out strikethrough tasks from yesterday (auto-clear at midnight)
+            tasks = tasks.filter(t => {
+                if (t.completed && t.completedDate && t.completedDate !== today) {
+                    // This is an old strikethrough task from yesterday, remove it
+                    return false;
+                }
+                return true;
+            });
+            localStorage.setItem('daily_tasks', JSON.stringify(tasks));
+
+            const tasksList = document.getElementById('tasksList');
+            if (tasks.length === 0) {
+                tasksList.innerHTML = '<div class="empty-message">No tasks yet. Add one to get started!</div>';
+                return;
+            }
+
+            tasksList.innerHTML = tasks.map(task => `
+                <div class="task-item">
+                    <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${task.id})">
+                    <span class="task-text">${task.text}</span>
+                    <button class="task-delete" onclick="deleteTask(${task.id})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        // Add Note
+        function addNote() {
+            const input = document.getElementById('noteInput');
+            const noteText = input.value.trim();
+            if (!noteText) return;
+
+            let notes = JSON.parse(localStorage.getItem('daily_notes') || '[]');
+            notes.push({
+                id: Date.now(),
+                text: noteText,
+                createdDate: new Date().toISOString().split('T')[0]
+            });
+            localStorage.setItem('daily_notes', JSON.stringify(notes));
+            input.value = '';
+            renderNotes();
+            syncToGoogleSheets('Daily Notes', { action: 'add', note: noteText });
+        }
+
+        // Clear All Notes
+        function clearNotes() {
+            if (confirm('Clear all notes for today? (They will be archived)')) {
+                let notes = JSON.parse(localStorage.getItem('daily_notes') || '[]');
+                const today = new Date().toISOString().split('T')[0];
+                const archivedNotes = notes.map(n => ({ ...n, clearedDate: today }));
+
+                localStorage.setItem('daily_notes', '[]');
+                renderNotes();
+
+                // Sync to Google Sheets
+                syncToGoogleSheets('Daily Notes', {
+                    action: 'clear_all',
+                    notesCount: notes.length,
+                    clearedDate: today,
+                    notes: archivedNotes
+                });
+            }
+        }
+
+        // Render Notes
+        function renderNotes() {
+            let notes = JSON.parse(localStorage.getItem('daily_notes') || '[]');
+            const notesList = document.getElementById('notesList');
+
+            if (notes.length === 0) {
+                notesList.innerHTML = '<div class="empty-message">No notes yet. Add one to get started!</div>';
+                return;
+            }
+
+            notesList.innerHTML = notes.map(note => `
+                <div class="note-item">${note.text}</div>
+            `).join('');
+        }
+
+        // Render Calendar
+        function renderCalendar() {
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            // Set month title
+            document.getElementById('calendarMonth').textContent =
+                currentCalendarDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+            // Get first day of month and number of days
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+            let days = [];
+
+            // Previous month's days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                days.push({ day: daysInPrevMonth - i, otherMonth: true });
+            }
+
+            // Current month's days
+            for (let i = 1; i <= daysInMonth; i++) {
+                days.push({ day: i, otherMonth: false });
+            }
+
+            // Next month's days
+            const remaining = 42 - days.length;
+            for (let i = 1; i <= remaining; i++) {
+                days.push({ day: i, otherMonth: true });
+            }
+
+            const today = new Date();
+            const tasks = JSON.parse(localStorage.getItem('daily_tasks') || '[]');
+            const notes = JSON.parse(localStorage.getItem('daily_notes') || '[]');
+
+            const calendarDays = document.getElementById('calendarDays');
+            calendarDays.innerHTML = days.map((d, idx) => {
+                const isToday = !d.otherMonth && d.day === today.getDate() &&
+                               month === today.getMonth() && year === today.getFullYear();
+                const hasActivity = !d.otherMonth && (tasks.length > 0 || notes.length > 0);
+
+                return `
+                    <div class="calendar-day ${d.otherMonth ? 'other-month' : ''} ${isToday ? 'today' : ''} ${hasActivity && !d.otherMonth ? 'has-activity' : ''}">
+                        ${d.day}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function prevMonth() {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+            renderCalendar();
+        }
+
+        function nextMonth() {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+            renderCalendar();
+        }
+
+        function todayMonth() {
+            currentCalendarDate = new Date();
+            renderCalendar();
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            updateTime();
+            loadStats();
+            renderTasks();
+            renderNotes();
+            renderCalendar();
+
+            // Auto-clear strikethrough tasks at midnight
+            setInterval(() => {
+                renderTasks();
+            }, 60000); // Check every minute
+
+            setInterval(updateTime, 1000);
+            setInterval(loadStats, 5000);
+        });
+
+        // Handle Enter key in task input
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.target.id === 'taskInput') {
+                addTask();
+            }
+        });
+
+        
+        // ========== STARTUP ==========
+        // Initialize Firebase sync when page loads
+        window.addEventListener('load', () => {
+            setTimeout(initFirebaseSync, 500);
+            console.log('ACKTIB Dashboard loaded with Firebase sync');
+        });
+
+    </script>
+</body>
+</html>
