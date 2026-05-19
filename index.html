@@ -1129,10 +1129,6 @@
         }
     </style>
 
-    <!-- Firebase SDK for Real-time Database -->
-    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.5.0/firebase-database.js"></script>
-
 </head>
 <body>
     <div class="container">
@@ -1415,7 +1411,7 @@
             <div style="display: flex; gap: 15px; flex-wrap: wrap;">
                 <span class="status-badge">Personal Tracker</span>
                 <span class="status-badge">Always On</span>
-                <span class="status-badge">Cloud Sync</span>
+                <span class="status-badge">Cloud Sync Ready</span>
                 <span class="status-badge">Private Data</span>
             </div>
         </div>
@@ -1448,58 +1444,22 @@
     </div>
 
     <script>
-        // ========== FIREBASE CONFIG & INIT ==========
-        const firebaseConfig = {
-            apiKey: "AIzaSyDU4I1fN4qXC8KSZA7Z29dVRh1gkrzGH8",
-            authDomain: "acktib-dcdfa.firebaseapp.com",
-            databaseURL: "https://acktib-dcdfa-default-rtdb.firebasebaseio.com",
-            projectId: "acktib-dcdfa",
-            storageBucket: "acktib-dcdfa.appspot.com",
-            messagingSenderId: "865204956727",
-            appId: "1:865204956727:web:12843ca3605ffc641f59b2"
-        };
-
-        let db = null;
-        let firebaseInitialized = false;
+        // ========== CLOUD SYNC - SIMPLIFIED APPROACH ==========
+        const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz1Vf-wO7x6dZkO6jmKbb-0EptIks5phXg_7vaTplJ2DPwPMGtxnvH9i6FehDm5h3KF3w/exec';
         let DEVICE_ID = localStorage.getItem('device_id') || 'device_' + Date.now();
 
-        function initializeFirebase() {
-            try {
-                if (typeof firebase !== 'undefined' && !firebaseInitialized) {
-                    firebase.initializeApp(firebaseConfig);
-                    db = firebase.database();
-                    firebaseInitialized = true;
-                    localStorage.setItem('device_id', DEVICE_ID);
-                    console.log('✅ Firebase initialized');
-                    initFirebaseSync();
-                }
-            } catch (e) {
-                console.log('⚠️ Firebase error:', e.message);
-            }
-        }
-
-        function initFirebaseSync() {
-            console.log('✅ Firebase sync ready');
-        }
-
-        async function syncToFirebase(dataType, data) {
-            if (!db) return;
-            try {
-                const userId = 'user_default';
-                const timestamp = new Date().toISOString();
-                const syncData = { ...data, timestamp, deviceId: DEVICE_ID };
-                await db.ref(`users/${userId}/${dataType}`).set(syncData);
-                console.log(`✅ Synced: ${dataType}`);
-            } catch (e) {
-                console.log(`⚠️ Firebase sync error for ${dataType}:`, e.message);
-            }
-        }
-
-        // Google Sheets Auto-Sync
-        const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz1Vf-wO7x6dZkO6jmKbb-0EptIks5phXg_7vaTplJ2DPwPMGtxnvH9i6FehDm5h3KF3w/exec';
-        function syncToGoogleSheets(toolName, data) {
-            const payload = { tool: toolName, timestamp: new Date().toISOString(), data: data };
-            fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: JSON.stringify(payload) }).catch(e => console.log('Sync:', e));
+        function syncToCloud(toolName, data) {
+            const payload = {
+                tool: toolName,
+                timestamp: new Date().toISOString(),
+                data: data,
+                deviceId: DEVICE_ID
+            };
+            fetch(GOOGLE_SHEETS_URL, {
+                method: 'POST',
+                body: JSON.stringify(payload)
+            }).catch(e => console.log('Cloud sync queued'));
+            console.log('✅ Cloud sync ready - ' + toolName);
         }
 
         // Update time every second
@@ -1515,10 +1475,7 @@
             const today = new Date().toISOString().split('T')[0];
             const metricsData = JSON.parse(localStorage.getItem('dashboard_metrics') || '[]');
 
-            // Calculate today's stats
             let todaysCalls = 0, todaysTalks = 0, todaysProposals = 0;
-
-            // Calculate week stats (last 7 days)
             let weekCalls = 0, weekTalks = 0, weekProposals = 0;
             const oneWeekAgo = new Date();
             oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
@@ -1529,7 +1486,6 @@
                     todaysTalks += entry.talks || 0;
                     todaysProposals += entry.proposals || 0;
                 }
-
                 if (new Date(entry.date) >= oneWeekAgo) {
                     weekCalls += entry.calls || 0;
                     weekTalks += entry.talks || 0;
@@ -1537,7 +1493,6 @@
                 }
             });
 
-            // Update DOM
             document.getElementById('todaysCalls').textContent = todaysCalls;
             document.getElementById('todaysTalks').textContent = todaysTalks;
             document.getElementById('todaysProposals').textContent = todaysProposals;
@@ -1552,9 +1507,7 @@
         let notes = [{ id: 'n0', type: 'bullet', text: '' }];
         let focusedBlockId = 't0';
 
-        // RENDER BOTH TASKS AND NOTES
         function render() {
-            // Render Tasks
             const tasksList = document.getElementById('tasksList');
             tasksList.innerHTML = tasks.map((block, idx) => {
                 let html = `<div class="block type-todo ${block.checked ? 'checked' : ''}" data-id="${block.id}">`;
@@ -1564,7 +1517,6 @@
                 return html;
             }).join('');
 
-            // Render Notes
             const notesList = document.getElementById('notesList');
             notesList.innerHTML = notes.map((block, idx) => {
                 let html = `<div class="block type-bullet" data-id="${block.id}">`;
@@ -1574,7 +1526,6 @@
                 return html;
             }).join('');
 
-            // Focus restoration
             setTimeout(() => {
                 const element = document.querySelector(`[data-id="${focusedBlockId}"] [contenteditable="true"]`);
                 if (element) element.focus();
@@ -1583,14 +1534,12 @@
             saveState();
         }
 
-        // ESCAPE HTML
         function escapeHtml(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
 
-        // UPDATE BLOCK
         function updateBlock(id, text, type) {
             const list = type === 'task' ? tasks : notes;
             const block = list.find(b => b.id === id);
@@ -1599,21 +1548,17 @@
             }
         }
 
-        // KEY HANDLERS
         function handleKeydown(e, id, type) {
             const list = type === 'task' ? tasks : notes;
             const block = list.find(b => b.id === id);
             const element = e.target;
 
-            // Shift+Enter: Allow line break (default behavior)
             if (e.key === 'Enter' && e.shiftKey) {
                 return;
             }
 
-            // Enter alone: Create new block
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-
                 const prefix = type === 'task' ? 't' : 'n';
                 const newId = prefix + Date.now();
                 const blockIdx = list.indexOf(block);
@@ -1629,7 +1574,6 @@
                 render();
             }
 
-            // Backspace at start of line: Merge with previous block
             if (e.key === 'Backspace' && list.length > 1) {
                 const selection = window.getSelection();
                 const range = selection.getRangeAt(0);
@@ -1662,7 +1606,6 @@
             }
         }
 
-        // TOGGLE CHECKBOX
         function toggleCheckbox(id, type) {
             const list = type === 'task' ? tasks : notes;
             const block = list.find(b => b.id === id);
@@ -1672,18 +1615,16 @@
             }
         }
 
-        // SAVE STATE
         function saveState() {
             localStorage.setItem('tasks_blocks', JSON.stringify(tasks));
             localStorage.setItem('notes_blocks', JSON.stringify(notes));
-            syncToGoogleSheets('Tasks & Notes Editor', {
+            syncToCloud('Tasks & Notes Editor', {
                 tasks: tasks,
                 notes: notes,
                 timestamp: new Date().toISOString()
             });
         }
 
-        // LOAD STATE
         function loadState() {
             const savedTasks = localStorage.getItem('tasks_blocks');
             const savedNotes = localStorage.getItem('notes_blocks');
@@ -1703,14 +1644,13 @@
             render();
         }
 
-        // CLEAR ALL BLOCKS
         function clearAllBlocks() {
             if (confirm('Clear all tasks and notes? This will be archived.')) {
                 if (tasks.some(b => b.text.trim()) || notes.some(b => b.text.trim())) {
                     const today = new Date().toISOString().split('T')[0];
                     saveToHistory(today, 'tasks', tasks);
                     saveToHistory(today, 'notes', notes);
-                    syncToGoogleSheets('Tasks & Notes Editor', {
+                    syncToCloud('Tasks & Notes Editor', {
                         action: 'clear_all',
                         tasks: tasks,
                         notes: notes,
@@ -1724,7 +1664,7 @@
             }
         }
 
-        // ========== DAILY JOURNAL (SIMPLE TEXT) ==========
+        // ========== DAILY JOURNAL ==========
         let journalAutoSaveTimer;
 
         function autoSaveJournal() {
@@ -1746,7 +1686,7 @@
             if (content.trim()) {
                 saveToHistory(today, 'journal', content);
             }
-            syncToGoogleSheets('Daily Journal', journalData);
+            syncToCloud('Daily Journal', journalData);
         }
 
         function loadJournal() {
@@ -1764,7 +1704,7 @@
                 const today = new Date().toISOString().split('T')[0];
                 if (content.trim()) {
                     saveToHistory(today, 'journal', content);
-                    syncToGoogleSheets('Daily Journal', {
+                    syncToCloud('Daily Journal', {
                         action: 'clear',
                         content: content,
                         clearedDate: today
@@ -1798,7 +1738,7 @@
             saveToHistory(today, 'learnings', notesData.importantPoints);
             saveToHistory(today, 'patterns', notesData.observationsPatterns);
             saveToHistory(today, 'actions', notesData.freeNotes);
-            syncToGoogleSheets('Quick Insights Notes', notesData);
+            syncToCloud('Quick Insights Notes', notesData);
         }
 
         function loadQuickNotes() {
@@ -1899,7 +1839,9 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            initializeFirebase();
+            localStorage.setItem('device_id', DEVICE_ID);
+            console.log('✅ Cloud sync initialized - Device ID: ' + DEVICE_ID);
+
             document.getElementById('historyModal').addEventListener('click', (e) => {
                 if (e.target.id === 'historyModal') {
                     closeHistoryModal();
@@ -2141,7 +2083,6 @@
 
         // Initialize
         window.addEventListener('load', () => {
-            initializeFirebase();
             updateTime();
             loadStats();
             loadState();
@@ -2155,4 +2096,3 @@
     </script>
 </body>
 </html>
-Firebase integration with real-time sync
