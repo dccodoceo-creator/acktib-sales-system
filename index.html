@@ -1411,8 +1411,8 @@
             <div style="display: flex; gap: 15px; flex-wrap: wrap;">
                 <span class="status-badge">Personal Tracker</span>
                 <span class="status-badge">Always On</span>
-                <span class="status-badge">Cloud Sync Ready</span>
-                <span class="status-badge">Private Data</span>
+                <span class="status-badge">🔥 Firebase Sync</span>
+                <span class="status-badge">Cross-Device</span>
             </div>
         </div>
 
@@ -1444,22 +1444,164 @@
     </div>
 
     <script>
-        // ========== CLOUD SYNC - SIMPLIFIED APPROACH ==========
+        // ========== FIREBASE REST API SYNC ==========
+        const FIREBASE_URL = 'https://acktib-dcdfa-default-rtdb.firebaseio.com';
         const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz1Vf-wO7x6dZkO6jmKbb-0EptIks5phXg_7vaTplJ2DPwPMGtxnvH9i6FehDm5h3KF3w/exec';
         let DEVICE_ID = localStorage.getItem('device_id') || 'device_' + Date.now();
+        let lastFirebaseSync = {};
+        let syncPollingInterval = null;
 
-        function syncToCloud(toolName, data) {
+        // Write to Firebase
+        async function writeToFirebase(path, data) {
+            const timestamp = Date.now();
+            const payload = {
+                ...data,
+                _deviceId: DEVICE_ID,
+                _timestamp: timestamp
+            };
+
+            try {
+                const response = await fetch(`${FIREBASE_URL}${path}.json`, {
+                    method: 'PATCH',
+                    body: JSON.stringify(payload),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                console.log(`✅ Firebase sync: ${path}`);
+                return true;
+            } catch (e) {
+                console.log('⚠️ Firebase sync queued - offline');
+                return false;
+            }
+        }
+
+        // Read from Firebase
+        async function readFromFirebase(path) {
+            try {
+                const response = await fetch(`${FIREBASE_URL}${path}.json`);
+                const data = await response.json();
+                return data || {};
+            } catch (e) {
+                console.log('⚠️ Could not read from Firebase');
+                return null;
+            }
+        }
+
+        // Sync local data to Firebase
+        async function syncToFirebase() {
+            const today = new Date().toISOString().split('T')[0];
+
+            // Sync tasks
+            await writeToFirebase(`/acktib/${today}/tasks`, {
+                data: tasks,
+                lastUpdated: Date.now()
+            });
+
+            // Sync notes
+            await writeToFirebase(`/acktib/${today}/notes`, {
+                data: notes,
+                lastUpdated: Date.now()
+            });
+
+            // Sync journal
+            const journalContent = document.getElementById('journalEditor')?.textContent || '';
+            if (journalContent.trim()) {
+                await writeToFirebase(`/acktib/${today}/journal`, {
+                    content: journalContent,
+                    lastUpdated: Date.now()
+                });
+            }
+
+            // Sync quick notes
+            const quickNotesData = {
+                learnings: document.getElementById('importantPoints')?.textContent || '',
+                patterns: document.getElementById('observationsPatterns')?.textContent || '',
+                actions: document.getElementById('freeNotes')?.textContent || ''
+            };
+            if (Object.values(quickNotesData).some(v => v.trim())) {
+                await writeToFirebase(`/acktib/${today}/quickNotes`, {
+                    ...quickNotesData,
+                    lastUpdated: Date.now()
+                });
+            }
+        }
+
+        // Poll Firebase for updates from other devices
+        async function pollFirebaseForUpdates() {
+            const today = new Date().toISOString().split('T')[0];
+
+            try {
+                // Check for task updates
+                const tasksData = await readFromFirebase(`/acktib/${today}/tasks`);
+                if (tasksData && tasksData._deviceId !== DEVICE_ID && tasksData._timestamp > (lastFirebaseSync.tasks || 0)) {
+                    if (tasksData.data && Array.isArray(tasksData.data)) {
+                        tasks = tasksData.data;
+                        lastFirebaseSync.tasks = tasksData._timestamp;
+                        render();
+                        console.log('📥 Tasks synced from Firebase');
+                    }
+                }
+
+                // Check for notes updates
+                const notesData = await readFromFirebase(`/acktib/${today}/notes`);
+                if (notesData && notesData._deviceId !== DEVICE_ID && notesData._timestamp > (lastFirebaseSync.notes || 0)) {
+                    if (notesData.data && Array.isArray(notesData.data)) {
+                        notes = notesData.data;
+                        lastFirebaseSync.notes = notesData._timestamp;
+                        render();
+                        console.log('📥 Notes synced from Firebase');
+                    }
+                }
+
+                // Check for journal updates
+                const journalData = await readFromFirebase(`/acktib/${today}/journal`);
+                if (journalData && journalData._deviceId !== DEVICE_ID && journalData._timestamp > (lastFirebaseSync.journal || 0)) {
+                    const journalEditor = document.getElementById('journalEditor');
+                    if (journalEditor && journalData.content) {
+                        journalEditor.textContent = journalData.content;
+                        lastFirebaseSync.journal = journalData._timestamp;
+                        console.log('📥 Journal synced from Firebase');
+                    }
+                }
+
+                // Check for quick notes updates
+                const quickNotesData = await readFromFirebase(`/acktib/${today}/quickNotes`);
+                if (quickNotesData && quickNotesData._deviceId !== DEVICE_ID && quickNotesData._timestamp > (lastFirebaseSync.quickNotes || 0)) {
+                    if (quickNotesData.learnings) document.getElementById('importantPoints').textContent = quickNotesData.learnings;
+                    if (quickNotesData.patterns) document.getElementById('observationsPatterns').textContent = quickNotesData.patterns;
+                    if (quickNotesData.actions) document.getElementById('freeNotes').textContent = quickNotesData.actions;
+                    lastFirebaseSync.quickNotes = quickNotesData._timestamp;
+                    console.log('📥 Quick notes synced from Firebase');
+                }
+            } catch (e) {
+                console.log('⚠️ Firebase polling error (offline?)');
+            }
+        }
+
+        // Legacy Google Sheets backup
+        async function syncToGoogleSheets(toolName, data) {
             const payload = {
                 tool: toolName,
                 timestamp: new Date().toISOString(),
                 data: data,
                 deviceId: DEVICE_ID
             };
-            fetch(GOOGLE_SHEETS_URL, {
-                method: 'POST',
-                body: JSON.stringify(payload)
-            }).catch(e => console.log('Cloud sync queued'));
-            console.log('✅ Cloud sync ready - ' + toolName);
+            try {
+                await fetch(GOOGLE_SHEETS_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                });
+            } catch (e) {
+                // Silent fail - Google Sheets is backup only
+            }
+        }
+
+        // Unified sync function
+        async function syncToCloud(toolName, data) {
+            // Primary: Firebase
+            await syncToFirebase();
+            // Secondary: Google Sheets (backup)
+            await syncToGoogleSheets(toolName, data);
+            console.log('✅ Cloud sync - Firebase + Sheets backup');
         }
 
         // Update time every second
@@ -1840,7 +1982,14 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('device_id', DEVICE_ID);
-            console.log('✅ Cloud sync initialized - Device ID: ' + DEVICE_ID);
+            console.log('✅ Firebase Realtime Sync initialized - Device ID: ' + DEVICE_ID);
+            console.log('✅ Cross-device sync enabled - polling every 10 seconds');
+
+            // Start polling Firebase for updates from other devices
+            pollFirebaseForUpdates(); // First sync immediately
+            syncPollingInterval = setInterval(() => {
+                pollFirebaseForUpdates();
+            }, 10000); // Poll every 10 seconds
 
             document.getElementById('historyModal').addEventListener('click', (e) => {
                 if (e.target.id === 'historyModal') {
