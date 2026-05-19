@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ACKTIB Sales System - Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,11 +12,11 @@
         }
 
         body {
-            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #050505 0%, #0a0a0a 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
             min-height: 100vh;
             padding: 20px;
-            color: #e8e8e8;
+            color: #f5f5f5;
         }
 
         .container {
@@ -54,7 +53,7 @@
 
         .header-clock {
             font-weight: 600;
-            color: #888888;
+            color: #00d4ff;
         }
 
         /* QUICK STATS SECTION */
@@ -66,33 +65,32 @@
         }
 
         .stat-mini-card {
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-left: 3px solid #666666;
+            background: #2b2b2b;
+            border: 1px solid #454545;
+            border-left: 3px solid #00d4ff;
             border-radius: 8px;
-            padding: 12px;
+            padding: 15px;
             text-align: center;
         }
 
         .stat-mini-label {
-            font-size: 10px;
+            font-size: 11px;
             color: #868686;
             text-transform: uppercase;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: 600;
-            letter-spacing: 0.5px;
         }
 
         .stat-mini-value {
-            font-size: 16px;
-            font-weight: 600;
-            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            color: #00d4ff;
         }
 
         .stat-mini-subtext {
             font-size: 11px;
             color: #686868;
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
         /* QUICK ACTIONS */
@@ -104,9 +102,9 @@
         }
 
         .action-btn {
-            background: linear-gradient(135deg, #444444 0%, #2a2a2a 100%);
-            color: #fff;
-            border: 1px solid #3a3a3a;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: #000;
+            border: none;
             padding: 14px 20px;
             border-radius: 8px;
             cursor: pointer;
@@ -120,8 +118,7 @@
 
         .action-btn:hover {
             transform: translateY(-2px);
-            background: linear-gradient(135deg, #555555 0%, #353535 100%);
-            box-shadow: 0 8px 16px rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 16px rgba(0, 212, 255, 0.3);
         }
 
         .grid {
@@ -132,8 +129,8 @@
         }
 
         .card {
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
+            background: #2b2b2b;
+            border: 1px solid #454545;
             border-radius: 12px;
             padding: 25px;
             transition: all 0.3s;
@@ -145,8 +142,8 @@
         }
 
         .card:hover {
-            border-color: #3a3a3a;
-            background: #222222;
+            border-color: #606060;
+            background: #323232;
             transform: translateY(-2px);
         }
 
@@ -286,57 +283,159 @@
             margin-top: 40px;
         }
 
-        /* DAILY COMMAND CENTER - iPhone Notes Style */
+        /* DAILY COMMAND CENTER */
         .command-center {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 40px;
+            gap: 25px;
             margin-bottom: 40px;
-            background: transparent;
-            border: none;
-            border-radius: 0;
-            padding: 0;
+            background: #2b2b2b;
+            border: 1px solid #454545;
+            border-radius: 12px;
+            padding: 25px;
         }
 
         .command-section h3 {
-            font-size: 28px;
+            font-size: 14px;
             font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 30px;
-            text-transform: none;
-            letter-spacing: 0;
+            color: #f5f5f5;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #00d4ff;
         }
 
-        /* NOTES & CHECKLIST (iPhone Notes Style) */
+        /* TASKS SECTION */
+        .tasks-container {
+            margin-bottom: 20px;
+        }
+
+        .task-input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .task-input-group input {
+            flex: 1;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            color: #f5f5f5;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .task-input-group input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: #252525;
+        }
+
+        .task-input-group button {
+            background: #00d4ff;
+            color: #000;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .task-input-group button:hover {
+            background: #00b8d4;
+        }
+
+        .tasks-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .task-item input[type="checkbox"] {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+        }
+
+        .task-text {
+            flex: 1;
+            font-size: 13px;
+            color: #a8a8a8;
+        }
+
+        .task-item input[type="checkbox"]:checked + .task-text {
+            text-decoration: line-through;
+            color: #686868;
+        }
+
+        .task-delete {
+            background: #454545;
+            border: none;
+            color: #a8a8a8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.3s;
+        }
+
+        .task-delete:hover {
+            background: #ff5555;
+            color: #fff;
+        }
+
+        .empty-message {
+            font-size: 12px;
+            color: #686868;
+            text-align: center;
+            padding: 15px;
+            font-style: italic;
+        }
+
+        /* NOTES SECTION */
         .notes-container {
-            margin-bottom: 0;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #3a3a3a;
         }
 
         .notes-input-group {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 10px;
+            margin-bottom: 12px;
         }
 
         .notes-input-group textarea {
-            background: transparent;
-            border: none;
-            color: #e8e8e8;
-            padding: 0;
-            font-size: 16px;
-            min-height: 100px;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            color: #f5f5f5;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            min-height: 60px;
             resize: vertical;
-            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.8;
+            font-family: inherit;
         }
 
         .notes-input-group textarea:focus {
             outline: none;
-        }
-
-        .notes-input-group textarea::placeholder {
-            color: #686868;
+            border-color: #00d4ff;
+            background: #252525;
         }
 
         .notes-button-group {
@@ -345,24 +444,23 @@
         }
 
         .notes-button-group button {
-            padding: 8px 16px;
-            border-radius: 20px;
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: 500;
-            font-size: 13px;
-            border: 1px solid #444444;
-            background: transparent;
-            color: #888888;
-            transition: all 0.2s;
+            font-weight: 600;
+            font-size: 12px;
+            border: none;
+            transition: all 0.3s;
         }
 
         .notes-add {
-            background: #888888;
+            background: #00d4ff;
             color: #000;
         }
 
         .notes-add:hover {
-            background: #999999;
+            background: #00b8d4;
         }
 
         .notes-clear {
@@ -377,73 +475,19 @@
         .notes-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            max-height: 300px;
+            gap: 8px;
+            max-height: 150px;
             overflow-y: auto;
-            padding: 0;
         }
 
         .note-item {
-            padding: 0;
-            background: transparent;
-            border: none;
-            font-size: 16px;
-            color: #d0d0d0;
-            line-height: 1.8;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            transition: color 0.2s;
-        }
-
-        .note-item:hover {
-            color: #ffffff;
-        }
-
-        .note-item input[type="checkbox"] {
-            cursor: pointer;
-            width: 18px;
-            height: 18px;
-            margin-top: 2px;
-            flex-shrink: 0;
-        }
-
-        .note-item-text {
-            flex: 1;
-            word-break: break-word;
-        }
-
-        .note-item input[type="checkbox"]:checked + .note-item-text {
-            text-decoration: line-through;
-            color: #686868;
-        }
-
-        .note-item-delete {
-            background: transparent;
-            border: none;
-            color: #686868;
-            padding: 0 4px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
-
-        .note-item-delete:hover {
-            color: #ff6b6b;
-        }
-
-        .note-plain {
-            color: #d0d0d0;
-            padding: 0;
-            margin-bottom: 0;
-        }
-
-        .empty-message {
-            font-size: 13px;
-            color: #686868;
-            padding: 20px 0;
-            font-style: italic;
-            text-align: center;
+            padding: 10px 12px;
+            background: #1a1a1a;
+            border: 1px solid #3a3a3a;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #a8a8a8;
+            line-height: 1.4;
         }
 
         /* MINI CALENDAR */
@@ -457,8 +501,6 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
-            min-height: 30px;
-            padding: 10px 0;
         }
 
         .calendar-header h3 {
@@ -483,7 +525,7 @@
         }
 
         .calendar-nav button:hover {
-            background: #888888;
+            background: #00d4ff;
             color: #000;
         }
 
@@ -512,13 +554,11 @@
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 4px;
-            min-height: 300px;
         }
 
         .calendar-day {
             aspect-ratio: 1;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
             border: 1px solid #3a3a3a;
@@ -527,12 +567,10 @@
             color: #a8a8a8;
             cursor: pointer;
             transition: all 0.3s;
-            position: relative;
-            padding: 2px 0;
         }
 
         .calendar-day:hover {
-            border-color: #888888;
+            border-color: #00d4ff;
             background: #252525;
         }
 
@@ -541,454 +579,15 @@
         }
 
         .calendar-day.today {
-            background: transparent;
-            color: #e4a834;
-            font-weight: 700;
-            border: 2px solid #e4a834;
-            box-shadow: inset 0 0 0 1px #e4a834;
-        }
-
-        .calendar-day.today::before {
-            border-color: #e4a834;
-            background: #e4a834;
+            background: #00d4ff;
+            color: #000;
+            font-weight: 600;
+            border-color: #00d4ff;
         }
 
         .calendar-day.has-activity {
-            border-color: #888888;
+            border-color: #00d4ff;
             background: #1a3a3a;
-        }
-
-        .calendar-day.holiday {
-            border-color: #ff6b6b;
-            background: #3a1a1a;
-            color: #ff9999;
-            font-weight: 600;
-            position: relative;
-        }
-
-        .calendar-day.holiday:hover {
-            background: #4a2a2a;
-        }
-
-        .holiday-label {
-            font-size: 7px;
-            color: #ff6b6b;
-            margin-top: 1px;
-            text-align: center;
-            max-width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            line-height: 1;
-        }
-
-        .calendar-day.weekend {
-            background: #1a1a1a;
-        }
-
-        .calendar-day.weekend:hover {
-            background: #252525;
-        }
-
-        .calendar-day {
-            position: relative;
-        }
-
-        .calendar-day::before {
-            content: '';
-            position: absolute;
-            width: 7px;
-            height: 7px;
-            background: transparent;
-            border: 1.5px solid #686868;
-            border-radius: 50%;
-            top: 3px;
-            left: 3px;
-            z-index: 10;
-        }
-
-        .calendar-day.has-history::before {
-            background: #e4a834;
-            border-color: #e4a834;
-        }
-
-        .calendar-day.other-month::before {
-            border-color: #454545;
-        }
-
-        /* HISTORY MODAL */
-        .history-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .history-modal.open {
-            display: flex;
-        }
-
-        .history-modal-content {
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            padding: 30px;
-            max-width: 700px;
-            max-height: 80vh;
-            overflow-y: auto;
-            width: 100%;
-            color: #e8e8e8;
-        }
-
-        .history-modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #2a2a2a;
-        }
-
-        .history-modal-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #f5f5f5;
-        }
-
-        .history-modal-close {
-            background: none;
-            border: none;
-            color: #a8a8a8;
-            font-size: 28px;
-            cursor: pointer;
-            padding: 0;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .history-modal-close:hover {
-            color: #f5f5f5;
-        }
-
-        .history-section {
-            margin-bottom: 25px;
-        }
-
-        .history-section-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #a8a8a8;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
-        }
-
-        .history-section-content {
-            font-size: 13px;
-            color: #d0d0d0;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            background: #0f0f0f;
-            padding: 12px;
-            border-radius: 6px;
-            border-left: 3px solid #e4a834;
-        }
-
-        .history-empty {
-            font-size: 13px;
-            color: #686868;
-            font-style: italic;
-        }
-
-        /* BLOCK-BASED EDITOR STYLES */
-        .editor-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 200px;
-        }
-
-        .editor-section {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 12px;
-        }
-
-        .editor-section-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #a8a8a8;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .blocks-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-            flex: 1;
-            min-height: 150px;
-            overflow-y: auto;
-            padding-right: 8px;
-        }
-
-        .block {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 4px 0;
-            min-height: 28px;
-            position: relative;
-        }
-
-        .block-content {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* HEADER */
-        .block.type-header input {
-            font-size: 19.2px;
-            font-weight: bold;
-            line-height: 1.4;
-        }
-
-        /* TODO CHECKBOX */
-        .block.type-todo {
-            align-items: center;
-        }
-
-        .checkbox {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            border: 2px solid #e4a834;
-            background: transparent;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: all 0.2s;
-        }
-
-        .checkbox:hover {
-            background: rgba(228, 168, 52, 0.1);
-        }
-
-        .checkbox.checked {
-            background: #e4a834;
-            border-color: #e4a834;
-        }
-
-        .checkbox.checked::after {
-            content: '✓';
-            color: #1c1c1e;
-            font-weight: bold;
-            font-size: 11px;
-        }
-
-        .block.type-todo [contenteditable="true"] {
-            text-decoration: none;
-            color: #ffffff;
-        }
-
-        .block.type-todo.checked [contenteditable="true"] {
-            text-decoration: line-through;
-            color: #888888;
-        }
-
-        /* BULLET */
-        .block.type-bullet .bullet-dash {
-            color: #888888;
-            flex-shrink: 0;
-            user-select: none;
-        }
-
-        .block.type-bullet input {
-            color: #ffffff;
-        }
-
-        /* PARAGRAPH */
-        .block.type-paragraph input {
-            color: #ffffff;
-        }
-
-        /* INPUT SHARED */
-        .blocks-list [contenteditable="true"] {
-            background: transparent;
-            border: none;
-            color: inherit;
-            font-size: 14px;
-            font-family: inherit;
-            width: 100%;
-            outline: none;
-            line-height: 1.2;
-            padding: 0;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            min-height: 1.3em;
-        }
-
-        .blocks-list [contenteditable="true"]:empty:before {
-            content: attr(data-placeholder);
-            color: #666666;
-        }
-
-        .blocks-list [contenteditable="true"]:focus {
-            outline: none;
-        }
-
-
-        /* KEY POINTS SECTION */
-        .key-points-container {
-            margin-bottom: 40px;
-        }
-
-        .key-points-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
-
-        .key-point-card {
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .key-point-number {
-            background: #e4a834;
-            color: #1c1c1e;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
-        .key-point-input {
-            background: transparent;
-            border: none;
-            color: #e8e8e8;
-            font-size: 13px;
-            font-family: inherit;
-            outline: none;
-            line-height: 1.4;
-            padding: 0;
-        }
-
-        .key-point-input::placeholder {
-            color: #666666;
-        }
-
-        .key-points-buttons {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-            grid-column: 1 / -1;
-        }
-
-        /* DAILY JOURNAL SECTION */
-        .journal-container {
-            margin-bottom: 40px;
-        }
-
-        .journal-editor {
-            min-height: 250px;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 8px;
-            color: #e8e8e8;
-            font-size: 14px;
-            font-family: inherit;
-            outline: none;
-            line-height: 1.6;
-            padding: 15px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            resize: vertical;
-            margin-bottom: 15px;
-        }
-
-        .journal-editor:focus {
-            border-color: #3a3a3a;
-            background: #1f1f1f;
-        }
-
-        .journal-editor:empty:before {
-            content: "Write your daily journal entry here...";
-            color: #666666;
-        }
-
-        /* QUICK NOTES BOXES */
-        .quick-notes-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-        }
-
-        .quick-note-box {
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            padding: 16px;
-            min-height: 150px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .quick-note-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: #a8a8a8;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            letter-spacing: 0.5px;
-        }
-
-        .quick-note-content {
-            background: transparent;
-            border: none;
-            color: #e8e8e8;
-            font-size: 13px;
-            font-family: inherit;
-            outline: none;
-            line-height: 1.4;
-            padding: 0;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            flex: 1;
-            resize: none;
-        }
-
-        .quick-note-content::placeholder {
-            color: #666666;
-        }
-
-        .quick-note-content:focus {
-            outline: none;
         }
 
         @media (max-width: 900px) {
@@ -1013,103 +612,11 @@
 <body>
     <div class="container">
         <div class="header">
-            <a href="index.html" style="text-decoration: none; color: inherit; cursor: pointer;">
-                <h1 style="margin: 0;">📊 Daily Dashboard</h1>
-            </a>
-            <p>Personal tracking and productivity system</p>
+            <h1>🎯 ACKTIB Sales System</h1>
+            <p>Centralized hub for your sales process, metrics, and personal development</p>
             <div class="header-meta">
-                <span>Daily tracker</span>
+                <span>Integrated commercial management system</span>
                 <span class="header-clock" id="currentTime">--:--</span>
-            </div>
-        </div>
-
-        <!-- QUICK ACTIONS -->
-        <div class="quick-actions">
-            <a href="metrics_dashboard.html" class="action-btn">📊 Register Metrics</a>
-            <a href="journal_system.html" class="action-btn">📝 Extended Journal</a>
-            <a href="calendar_dashboard.html" class="action-btn">📅 View Calendar</a>
-        </div>
-
-        <!-- DAILY COMMAND CENTER -->
-        <div class="command-center">
-            <!-- LEFT: Block-Based Editor (Tasks & Notes) -->
-            <div>
-                <div class="command-section">
-                    <h3 style="font-size: 18px;">Today's Tasks</h3>
-                    <div class="editor-container">
-                        <!-- TASKS SECTION -->
-                        <div class="editor-section">
-                            <div class="editor-section-title">Tasks</div>
-                            <div class="blocks-list" id="tasksList"></div>
-                        </div>
-
-                        <!-- NOTES SECTION -->
-                        <div class="editor-section">
-                            <div class="editor-section-title">Notes</div>
-                            <div class="blocks-list" id="notesList"></div>
-                        </div>
-
-                        <div class="notes-button-group" style="margin-top: 15px; justify-content: flex-end;">
-                            <button class="notes-clear" onclick="clearAllBlocks()">Clear All</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- RIGHT: Mini Calendar -->
-            <div class="mini-calendar">
-                <div class="calendar-header">
-                    <div>
-                        <div class="calendar-month" id="calendarMonth"></div>
-                    </div>
-                    <div class="calendar-nav">
-                        <button onclick="prevMonth()">←</button>
-                        <button onclick="todayMonth()">Today</button>
-                        <button onclick="nextMonth()">→</button>
-                    </div>
-                </div>
-                <div class="calendar-weekdays">
-                    <div class="calendar-weekday">Mon</div>
-                    <div class="calendar-weekday">Tue</div>
-                    <div class="calendar-weekday">Wed</div>
-                    <div class="calendar-weekday">Thu</div>
-                    <div class="calendar-weekday">Fri</div>
-                    <div class="calendar-weekday">Sat</div>
-                    <div class="calendar-weekday">Sun</div>
-                </div>
-                <div class="calendar-days" id="calendarDays"></div>
-            </div>
-        </div>
-
-        <!-- QUICK NOTES -->
-        <div class="key-points-container">
-            <div class="command-section">
-                <h3>📝 Quick Insights</h3>
-                <div class="quick-notes-grid">
-                    <div class="quick-note-box">
-                        <div class="quick-note-title">📚 Today's Learnings</div>
-                        <div class="quick-note-content" id="importantPoints" contenteditable="true" placeholder="What did you discover or learn today? New processes, insights, skills..." oninput="autoSaveNotes()"></div>
-                    </div>
-                    <div class="quick-note-box">
-                        <div class="quick-note-title">🔍 Patterns & Winning Tactics</div>
-                        <div class="quick-note-content" id="observationsPatterns" contenteditable="true" placeholder="What works? Client patterns, successful approaches, repeatable tactics..." oninput="autoSaveNotes()"></div>
-                    </div>
-                    <div class="quick-note-box">
-                        <div class="quick-note-title">✅ Action Items & Growth Areas</div>
-                        <div class="quick-note-content" id="freeNotes" contenteditable="true" placeholder="What's next? Follow-ups, skills to improve, things to practice..." oninput="autoSaveNotes()"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- DAILY JOURNAL -->
-        <div class="journal-container">
-            <div class="command-section">
-                <h3>📔 Daily Journal</h3>
-                <div class="journal-editor" id="journalEditor" contenteditable="true" oninput="autoSaveJournal()"></div>
-                <div class="notes-button-group" style="margin-top: 15px; justify-content: flex-end;">
-                    <button class="notes-clear" onclick="clearJournal()">Clear</button>
-                </div>
             </div>
         </div>
 
@@ -1137,77 +644,157 @@
             </div>
         </div>
 
+        <!-- QUICK ACTIONS -->
+        <div class="quick-actions">
+            <a href="daily_notifications.html" class="action-btn">⏰ Plan AM/PM Today</a>
+            <a href="metrics_dashboard.html" class="action-btn">📊 Register Metrics</a>
+            <a href="journal_system.html" class="action-btn">📝 Daily Journal</a>
+            <a href="calendar_dashboard.html" class="action-btn">📅 View Calendar</a>
+        </div>
+
+        <!-- DAILY COMMAND CENTER -->
+        <div class="command-center">
+            <!-- LEFT: Tasks & Notes -->
+            <div>
+                <!-- TASKS -->
+                <div class="command-section">
+                    <h3>✅ Today's Tasks</h3>
+                    <div class="tasks-container">
+                        <div class="task-input-group">
+                            <input type="text" id="taskInput" placeholder="Add a task...">
+                            <button onclick="addTask()">Add</button>
+                        </div>
+                        <div class="tasks-list" id="tasksList"></div>
+                    </div>
+                </div>
+
+                <!-- NOTES -->
+                <div class="command-section">
+                    <h3>📝 Daily Notes</h3>
+                    <div class="notes-container">
+                        <div class="notes-input-group">
+                            <textarea id="noteInput" placeholder="Quick notes, reminders, ideas..."></textarea>
+                            <div class="notes-button-group">
+                                <button class="notes-add" onclick="addNote()">+ Add Note</button>
+                                <button class="notes-clear" onclick="clearNotes()">Clear All</button>
+                            </div>
+                        </div>
+                        <div class="notes-list" id="notesList"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Mini Calendar -->
+            <div class="mini-calendar">
+                <div class="command-section">
+                    <div class="calendar-header">
+                        <div>
+                            <div class="calendar-month" id="calendarMonth"></div>
+                        </div>
+                        <div class="calendar-nav">
+                            <button onclick="prevMonth()">←</button>
+                            <button onclick="todayMonth()">Today</button>
+                            <button onclick="nextMonth()">→</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="calendar-weekdays">
+                    <div class="calendar-weekday">Sun</div>
+                    <div class="calendar-weekday">Mon</div>
+                    <div class="calendar-weekday">Tue</div>
+                    <div class="calendar-weekday">Wed</div>
+                    <div class="calendar-weekday">Thu</div>
+                    <div class="calendar-weekday">Fri</div>
+                    <div class="calendar-weekday">Sat</div>
+                </div>
+                <div class="calendar-days" id="calendarDays"></div>
+            </div>
+        </div>
+
         <!-- MAIN TOOLS -->
         <div class="section">
-            <h2 class="section-title">📂 Tools & Features</h2>
+            <h2 class="section-title">🔧 Main Tools</h2>
             <div class="grid">
                 <!-- Calendar Dashboard -->
                 <a href="calendar_dashboard.html" class="card">
                     <div class="card-icon">📅</div>
-                    <div class="card-title">Calendar</div>
-                    <div class="card-description">Monthly overview of your activities and milestones.</div>
+                    <div class="card-title">Calendar Dashboard</div>
+                    <div class="card-description">Monthly view of your activity. Click any day to view/edit data.</div>
                     <div class="card-features">
-                        <div class="card-feature">✓ Monthly view</div>
-                        <div class="card-feature">✓ Daily tracking</div>
+                        <div class="card-feature">✓ Daily Task checks (AM/PM)</div>
+                        <div class="card-feature">✓ Completion % per day</div>
                         <div class="card-feature">✓ Visual indicators</div>
-                        <div class="card-feature">✓ Notes integration</div>
+                        <div class="card-feature">✓ Edit/view modal</div>
                     </div>
                     <div class="card-button">Open →</div>
                 </a>
 
+                <!-- Notifications -->
+                <a href="daily_notifications.html" class="card">
+                    <div class="card-icon">⏰</div>
+                    <div class="card-title">Daily Notifications</div>
+                    <div class="card-description">Automatic notifications at 9:00 AM and 17:45 hrs (Mon-Fri).</div>
+                    <div class="card-features">
+                        <div class="card-feature">✓ Real-time clock</div>
+                        <div class="card-feature">✓ Next notification visible</div>
+                        <div class="card-feature">✓ Daily history</div>
+                        <div class="card-feature">✓ Toggle on/off</div>
+                    </div>
+                    <div class="card-button">Open →</div>
+                </a>
 
                 <!-- Metrics Dashboard -->
                 <a href="metrics_dashboard.html" class="card">
                     <div class="card-icon">📊</div>
-                    <div class="card-title">Metrics</div>
-                    <div class="card-description">Track your progress with weekly and monthly metrics.</div>
+                    <div class="card-title">Metrics Dashboard</div>
+                    <div class="card-description">Weekly, monthly, and personal metrics. Real-time KPIs.</div>
                     <div class="card-features">
-                        <div class="card-feature">✓ Weekly tracking</div>
-                        <div class="card-feature">✓ Monthly summaries</div>
-                        <div class="card-feature">✓ Personal KPIs</div>
-                        <div class="card-feature">✓ Visual charts</div>
+                        <div class="card-feature">✓ Weekly (calls, talks)</div>
+                        <div class="card-feature">✓ Monthly (KPIs, revenue)</div>
+                        <div class="card-feature">✓ Personal (skills)</div>
+                        <div class="card-feature">✓ Dynamic charts</div>
                     </div>
                     <div class="card-button">Open →</div>
                 </a>
 
                 <!-- Journal System -->
                 <a href="journal_system.html" class="card">
-                    <div class="card-icon">📝</div>
-                    <div class="card-title">Journal</div>
-                    <div class="card-description">Reflections and notes for daily, weekly, and monthly reviews.</div>
+                    <div class="card-icon">📖</div>
+                    <div class="card-title">Journal System</div>
+                    <div class="card-description">Deep reflection: Daily (Mon-Fri), Friday (closing), and Sunday (prep).</div>
                     <div class="card-features">
-                        <div class="card-feature">✓ Daily entries</div>
-                        <div class="card-feature">✓ Weekly review</div>
-                        <div class="card-feature">✓ Monthly reflection</div>
-                        <div class="card-feature">✓ Private journals</div>
+                        <div class="card-feature">✓ Daily Journal</div>
+                        <div class="card-feature">✓ Friday Journal</div>
+                        <div class="card-feature">✓ Sunday Journal</div>
+                        <div class="card-feature">✓ History by type</div>
                     </div>
                     <div class="card-button">Open →</div>
                 </a>
 
-                <!-- Reference Database -->
+                <!-- Playbook Objeciones -->
                 <a href="playbook_objections.html" class="card">
-                    <div class="card-icon">📚</div>
-                    <div class="card-title">Reference</div>
-                    <div class="card-description">Personal database for responses and solutions.</div>
+                    <div class="card-icon">⚠️</div>
+                    <div class="card-title">Objections Playbook</div>
+                    <div class="card-description">Database of objections with effective scripts and success rates.</div>
                     <div class="card-features">
-                        <div class="card-feature">✓ Custom entries</div>
-                        <div class="card-feature">✓ Quick search</div>
-                        <div class="card-feature">✓ Success tracking</div>
-                        <div class="card-feature">✓ Statistics</div>
+                        <div class="card-feature">✓ Complete database</div>
+                        <div class="card-feature">✓ Scripts per objection</div>
+                        <div class="card-feature">✓ Statistics (top 3)</div>
+                        <div class="card-feature">✓ Success rate improvement</div>
                     </div>
                     <div class="card-button">Open →</div>
                 </a>
 
-                <!-- Personal Progress -->
+                <!-- Personal Tracker -->
                 <a href="personal_tracker.html" class="card">
                     <div class="card-icon">📈</div>
-                    <div class="card-title">Progress</div>
-                    <div class="card-description">Track your personal growth, skills, and development.</div>
+                    <div class="card-title">Personal Tracker</div>
+                    <div class="card-description">Your evolution as a salesperson. Skills, feedback, and month-to-month progress.</div>
                     <div class="card-features">
-                        <div class="card-feature">✓ Skill tracking</div>
-                        <div class="card-feature">✓ Progress notes</div>
+                        <div class="card-feature">✓ Skills in progress</div>
+                        <div class="card-feature">✓ Feedback (boss + self)</div>
                         <div class="card-feature">✓ Evolution charts</div>
-                        <div class="card-feature">✓ Monthly reports</div>
+                        <div class="card-feature">✓ Strength + weakness</div>
                     </div>
                     <div class="card-button">Open →</div>
                 </a>
@@ -1216,36 +803,48 @@
 
         <!-- WORKFLOW -->
         <div class="section">
-            <h2 class="section-title">⏱️ Daily Rhythm</h2>
+            <h2 class="section-title">📅 Your Weekly Workflow</h2>
             <div class="timeline">
                 <div class="timeline-item">
-                    <div class="timeline-time">Morning (9:00 AM)</div>
-                    <div class="timeline-title">Start Your Day</div>
-                    <div class="timeline-description">Check reminders, review priorities for the day</div>
+                    <div class="timeline-time">09:00 AM (Monday-Friday)</div>
+                    <div class="timeline-title">Plan AM</div>
+                    <div class="timeline-description">Define 3 priorities + daily checklist. Automatic notification → Daily Notifications</div>
                 </div>
 
                 <div class="timeline-item">
                     <div class="timeline-time">During the day</div>
-                    <div class="timeline-title">Track & Log</div>
-                    <div class="timeline-description">Use the dashboard to log activities, notes, and progress</div>
+                    <div class="timeline-title">Execution + Logging</div>
+                    <div class="timeline-description">Make calls, add talks, etc. You can register in Calendar Dashboard or Metrics at end of day</div>
                 </div>
 
                 <div class="timeline-item">
-                    <div class="timeline-time">Evening (5:45 PM)</div>
-                    <div class="timeline-title">Review & Reflect</div>
-                    <div class="timeline-description">Review the day, update metrics, and add evening notes</div>
+                    <div class="timeline-time">17:45 PM (Monday-Friday)</div>
+                    <div class="timeline-title">Review PM</div>
+                    <div class="timeline-description">Reflect: what you completed, clients contacted, learnings. Automatic notification</div>
                 </div>
 
                 <div class="timeline-item">
-                    <div class="timeline-time">Weekly</div>
-                    <div class="timeline-title">Weekly Review</div>
-                    <div class="timeline-description">Journal entry: progress, learnings, adjustments for next week</div>
+                    <div class="timeline-time">Afternoon (Mon-Fri)</div>
+                    <div class="timeline-title">Daily Journal (optional)</div>
+                    <div class="timeline-description">Record important points, observations, and notes. Build operational memory</div>
                 </div>
 
                 <div class="timeline-item">
-                    <div class="timeline-time">Monthly</div>
-                    <div class="timeline-title">Monthly Reflection</div>
-                    <div class="timeline-description">Review metrics, track progress, plan next month</div>
+                    <div class="timeline-time">Friday afternoon</div>
+                    <div class="timeline-title">Friday Journal</div>
+                    <div class="timeline-description">Weekly closing: what went well, challenges, metrics, next focus</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">Sunday</div>
+                    <div class="timeline-title">Sunday Journal + Planning</div>
+                    <div class="timeline-description">Mental preparation, weekly objective, plan by day. Review Personal Tracker</div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-time">Saturday</div>
+                    <div class="timeline-title">OFF 🎉</div>
+                    <div class="timeline-description">No Daily Tasks. You can advance if you want, but no pressure</div>
                 </div>
             </div>
         </div>
@@ -1255,57 +854,66 @@
             <h2 class="section-title">💡 Helpful Information</h2>
 
             <div class="info-box">
-                <div class="info-title">📌 Main Tools</div>
+                <div class="info-title">🎯 Where to Start?</div>
                 <div class="info-content">
-                    <strong>• Calendar:</strong> Monthly overview of activities and notes.<br>
-                    <strong>• Daily Notifications:</strong> Scheduled reminders (9:00am, 5:45pm).<br>
-                    <strong>• Metrics:</strong> Track your weekly/monthly progress and goals.<br>
-                    <strong>• Journal:</strong> Daily reflections and weekly reviews.<br>
-                    <strong>• Personal Tracker:</strong> Skills development and progress tracking.
+                    <strong>1. Calendar Dashboard:</strong> Your main view. Navigate the month, see what's missing.<br>
+                    <strong>2. Daily Notifications:</strong> Keep open to receive alerts at 9am and 5:45pm.<br>
+                    <strong>3. Metrics Dashboard:</strong> End of week, review what happened vs goals.<br>
+                    <strong>4. Journal System:</strong> For deep reflection (Friday + Sunday especially).<br>
+                    <strong>5. Playbook:</strong> Add new objections to improve your scripts.
                 </div>
             </div>
 
             <div class="info-box">
-                <div class="info-title">⚡ Quick Tips</div>
+                <div class="info-title">📊 KPIs to Track</div>
                 <div class="info-content">
-                    <strong>Notes & Checklist:</strong> Type normally for checklist items, or start with "- " for a note.<br>
-                    <strong>Tasks:</strong> Completed items auto-clear at midnight.<br>
-                    <strong>Calendar:</strong> Weekends appear darker. Holidays are marked in red.
+                    <strong>Daily:</strong> Calls, responses (ratio), talks, proposals, average time<br>
+                    <strong>Weekly:</strong> Total calls (goal 50), talks (goal 4), talk→proposal conversion<br>
+                    <strong>Monthly:</strong> Total calls (goal 200), talks (goal 16), revenue, trend
                 </div>
             </div>
 
             <div class="info-box">
-                <div class="info-title">💾 Data Storage</div>
+                <div class="info-title">💾 Storage</div>
                 <div class="info-content">
-                    Everything saves to <strong>browser storage</strong> locally. Data syncs to cloud backup automatically. No internet required once loaded. All data is private and personal.
+                    Everything saves to <strong>browser localStorage</strong> (no server). Data persists between sessions. Doesn't require internet (once loaded). If you need to switch browsers, you can export from localStorage.
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-title">🔄 Pipedrive Integration</div>
+                <div class="info-content">
+                    This system is your <strong>personal "business intelligence"</strong>. Pipedrive remains your primary CRM. You can record contacted clients in Daily Task Manager and then transfer to Pipedrive, or vice versa.
+                </div>
+            </div>
+
+            <div class="info-box">
+                <div class="info-title">✅ Cowork Setup</div>
+                <div class="info-content">
+                    1. Create new workflow<br>
+                    2. Add task "Open Daily Notifications" (9:00am)<br>
+                    3. Add task "Register metrics" (variable)<br>
+                    4. Add task "Friday Journal" (Friday)<br>
+                    5. Add task "Sunday Journal" (Sunday)<br>
+                    6. Save links to each tool in notes
                 </div>
             </div>
         </div>
 
         <!-- STATUS -->
         <div class="section">
-            <h2 class="section-title">✓ Status</h2>
+            <h2 class="section-title">🚀 System</h2>
             <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                <span class="status-badge">Personal Tracker</span>
-                <span class="status-badge">Always On</span>
-                <span class="status-badge">Cloud Sync</span>
-                <span class="status-badge">Private Data</span>
+                <span class="status-badge">v2.0 Enhanced</span>
+                <span class="status-badge">Live Stats</span>
+                <span class="status-badge">LocalStorage</span>
+                <span class="status-badge">Responsive</span>
+                <span class="status-badge">No dependencies</span>
             </div>
         </div>
 
         <div class="footer">
-            Daily Dashboard • Personal productivity and tracking system • 2026
-        </div>
-    </div>
-
-    <!-- HISTORY MODAL -->
-    <div class="history-modal" id="historyModal">
-        <div class="history-modal-content">
-            <div class="history-modal-header">
-                <div class="history-modal-title" id="historyModalDate"></div>
-                <button class="history-modal-close" onclick="closeHistoryModal()">✕</button>
-            </div>
-            <div id="historyModalBody"></div>
+            ACKTIB Sales System v2.0 • Complete sales and personal development manager • 2026
         </div>
     </div>
 
@@ -1313,7 +921,138 @@
         // Google Sheets Auto-Sync
         const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz1Vf-wO7x6dZkO6jmKbb-0EptIks5phXg_7vaTplJ2DPwPMGtxnvH9i6FehDm5h3KF3w/exec';
         function syncToGoogleSheets(toolName, data) {
-            const payload = { tool: toolName, timestamp: new Date().toISOString(), data: data };
+            const payload = { tool: toolName, timestamp: new Date().toISOString(), data: data }
+
+
+        // ========== FIREBASE CONFIGURATION ==========
+        const firebaseConfig = {
+            apiKey: "AIzaSyDU4I1fN4qXC8KSZA7Z29dVRh1gkrzGH8",
+            authDomain: "acktib-dcdfa.firebaseapp.com",
+            databaseURL: "https://acktib-dcdfa-default-rtdb.firebasebaseio.com",
+            projectId: "acktib-dcdfa",
+            storageBucket: "acktib-dcdfa.appspot.com",
+            messagingSenderId: "865204956727",
+            appId: "1:865204956727:web:12843ca3605ffc641f59b2",
+            measurementId: "G-S0ZVV7ER56"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        
+        // Generate or get device ID
+        let DEVICE_ID = localStorage.getItem('device_id');
+        if (!DEVICE_ID) {
+            DEVICE_ID = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('device_id', DEVICE_ID);
+        }
+
+        // Sync configuration
+        const SYNC_INTERVAL = 5 * 60 * 1000; // 5 minutes
+        let lastSyncTime = 0;
+        let syncInProgress = false;
+        const userId = 'user_' + Math.random().toString(36).substr(2, 9); // Unique user per browser
+
+        // ========== FIREBASE SYNC FUNCTIONS ==========
+        async function syncToFirebase(dataType, data) {
+            if (syncInProgress) return; // Prevent simultaneous syncs
+            syncInProgress = true;
+            
+            try {
+                const timestamp = new Date().toISOString();
+                const syncData = {
+                    ...data,
+                    timestamp: timestamp,
+                    deviceId: DEVICE_ID,
+                    syncedAt: firebase.database.ServerValue.TIMESTAMP
+                };
+                
+                const path = `users/${userId}/${dataType}`;
+                await db.ref(path).set(syncData);
+                lastSyncTime = Date.now();
+                console.log(`✅ Synced ${dataType} to Firebase`);
+            } catch (e) {
+                console.log(`⚠️ Firebase sync error for ${dataType}:`, e);
+            } finally {
+                syncInProgress = false;
+            }
+        }
+
+        async function batchSyncToFirebase() {
+            // Sync all current data to Firebase (called every 5 minutes)
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Sync tasks & notes
+            if (tasks && tasks.length > 0) {
+                await syncToFirebase('tasks_blocks', { tasks, timestamp: new Date().toISOString() });
+            }
+            if (notes && notes.length > 0) {
+                await syncToFirebase('notes_blocks', { notes, timestamp: new Date().toISOString() });
+            }
+            
+            // Sync journal
+            const journal = document.getElementById('journalEditor')?.textContent;
+            if (journal && journal.trim()) {
+                await syncToFirebase(`journal_${today}`, { date: today, content: journal });
+            }
+            
+            // Sync quick notes
+            const quickNotes = {
+                importantPoints: document.getElementById('importantPoints')?.textContent || '',
+                observationsPatterns: document.getElementById('observationsPatterns')?.textContent || '',
+                freeNotes: document.getElementById('freeNotes')?.textContent || ''
+            };
+            if (JSON.stringify(quickNotes) !== '{}') {
+                await syncToFirebase(`quickNotes_${today}`, { date: today, ...quickNotes });
+            }
+        }
+
+        function initFirebaseSync() {
+            // Set up real-time listeners from other devices
+            db.ref(`users/${userId}`).on('value', (snapshot) => {
+                if (!snapshot.val()) return;
+                
+                const remoteData = snapshot.val();
+                const today = new Date().toISOString().split('T')[0];
+                
+                // Load tasks from Firebase if newer
+                if (remoteData.tasks_blocks && remoteData.tasks_blocks.timestamp > lastSyncTime) {
+                    tasks = remoteData.tasks_blocks.tasks || tasks;
+                    render();
+                }
+                
+                // Load notes from Firebase if newer
+                if (remoteData.notes_blocks && remoteData.notes_blocks.timestamp > lastSyncTime) {
+                    notes = remoteData.notes_blocks.notes || notes;
+                    render();
+                }
+                
+                // Load journal from Firebase if newer
+                if (remoteData[`journal_${today}`]) {
+                    document.getElementById('journalEditor').textContent = remoteData[`journal_${today}`].content || '';
+                }
+                
+                // Load quick notes from Firebase if newer
+                if (remoteData[`quickNotes_${today}`]) {
+                    const qn = remoteData[`quickNotes_${today}`];
+                    document.getElementById('importantPoints').textContent = qn.importantPoints || '';
+                    document.getElementById('observationsPatterns').textContent = qn.observationsPatterns || '';
+                    document.getElementById('freeNotes').textContent = qn.freeNotes || '';
+                }
+            });
+            
+            // Batch sync every 5 minutes
+            setInterval(batchSyncToFirebase, SYNC_INTERVAL);
+            
+            // Sync on page unload
+            window.addEventListener('beforeunload', () => {
+                batchSyncToFirebase();
+            });
+            
+            console.log('✅ Firebase sync initialized');
+        }
+
+;
             fetch(GOOGLE_SHEETS_URL, { method: 'POST', body: JSON.stringify(payload) }).catch(e => console.log('Sync:', e));
         }
 
@@ -1362,410 +1101,139 @@
             document.getElementById('totalEntries').textContent = metricsData.length;
         }
 
-        // ========== BLOCK-BASED EDITOR (TASKS & NOTES SEPARATED) ==========
-        let tasks = [{ id: 't0', type: 'todo', text: '', checked: false }];
-        let notes = [{ id: 'n0', type: 'bullet', text: '' }];
-        let focusedBlockId = 't0';
-
-        // RENDER BOTH TASKS AND NOTES
-        function render() {
-            // Render Tasks
-            const tasksList = document.getElementById('tasksList');
-            tasksList.innerHTML = tasks.map((block, idx) => {
-                let html = `<div class="block type-todo ${block.checked ? 'checked' : ''}" data-id="${block.id}">`;
-                html += `<div class="checkbox ${block.checked ? 'checked' : ''}" onclick="toggleCheckbox('${block.id}', 'task')"></div>`;
-                html += `<div class="block-content"><div contenteditable="true" data-placeholder="Add a task..." onkeydown="handleKeydown(event, '${block.id}', 'task')" oninput="updateBlock('${block.id}', this.textContent, 'task')">${escapeHtml(block.text)}</div></div>`;
-                html += `</div>`;
-                return html;
-            }).join('');
-
-            // Render Notes
-            const notesList = document.getElementById('notesList');
-            notesList.innerHTML = notes.map((block, idx) => {
-                let html = `<div class="block type-bullet" data-id="${block.id}">`;
-                html += `<span class="bullet-dash">–</span>`;
-                html += `<div class="block-content"><div contenteditable="true" data-placeholder="Add a note..." onkeydown="handleKeydown(event, '${block.id}', 'note')" oninput="updateBlock('${block.id}', this.textContent, 'note')">${escapeHtml(block.text)}</div></div>`;
-                html += `</div>`;
-                return html;
-            }).join('');
-
-            // Focus restoration
-            setTimeout(() => {
-                const element = document.querySelector(`[data-id="${focusedBlockId}"] [contenteditable="true"]`);
-                if (element) element.focus();
-            }, 0);
-
-            saveState();
-        }
-
-        // ESCAPE HTML
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // UPDATE BLOCK
-        function updateBlock(id, text, type) {
-            const list = type === 'task' ? tasks : notes;
-            const block = list.find(b => b.id === id);
-            if (block) {
-                block.text = text;
-            }
-        }
-
-        // KEY HANDLERS
-        function handleKeydown(e, id, type) {
-            const list = type === 'task' ? tasks : notes;
-            const block = list.find(b => b.id === id);
-            const element = e.target;
-
-            // Shift+Enter: Allow line break (default behavior)
-            if (e.key === 'Enter' && e.shiftKey) {
-                // Allow default behavior for soft line break
-                return;
-            }
-
-            // Enter alone: Create new block
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-
-                // Create new block of same type
-                const prefix = type === 'task' ? 't' : 'n';
-                const newId = prefix + Date.now();
-                const blockIdx = list.indexOf(block);
-                const newBlock = {
-                    id: newId,
-                    type: type === 'task' ? 'todo' : 'bullet',
-                    text: ''
-                };
-                if (type === 'task') newBlock.checked = false;
-
-                list.splice(blockIdx + 1, 0, newBlock);
-                focusedBlockId = newId;
-                render();
-            }
-
-            // Backspace at start of line: Merge with previous block
-            if (e.key === 'Backspace' && list.length > 1) {
-                const selection = window.getSelection();
-                const range = selection.getRangeAt(0);
-
-                // Check if cursor is at the start of the element
-                if (range.startOffset === 0 && element.childNodes.length === 0) {
-                    const idx = list.findIndex(b => b.id === id);
-                    if (idx > 0) {
-                        e.preventDefault();
-                        const prevBlock = list[idx - 1];
-                        const prevText = prevBlock.text;
-                        prevBlock.text += block.text;
-
-                        list.splice(idx, 1);
-                        focusedBlockId = prevBlock.id;
-                        render();
-
-                        setTimeout(() => {
-                            const element = document.querySelector(`[data-id="${prevBlock.id}"] [contenteditable="true"]`);
-                            if (element) {
-                                element.focus();
-                                const range = document.createRange();
-                                range.setStart(element.firstChild || element, prevText.length);
-                                range.collapse(true);
-                                window.getSelection().removeAllRanges();
-                                window.getSelection().addRange(range);
-                            }
-                        }, 0);
-                    }
-                }
-            }
-        }
-
-        // TOGGLE CHECKBOX
-        function toggleCheckbox(id, type) {
-            const list = type === 'task' ? tasks : notes;
-            const block = list.find(b => b.id === id);
-            if (block && block.type === 'todo') {
-                block.checked = !block.checked;
-                render();
-            }
-        }
-
-        // SAVE STATE
-        function saveState() {
-            localStorage.setItem('tasks_blocks', JSON.stringify(tasks));
-            localStorage.setItem('notes_blocks', JSON.stringify(notes));
-            syncToGoogleSheets('Tasks & Notes Editor', {
-                tasks: tasks,
-                notes: notes,
-                timestamp: new Date().toISOString()
-            });
-        }
-
-        // LOAD STATE
-        function loadState() {
-            const savedTasks = localStorage.getItem('tasks_blocks');
-            const savedNotes = localStorage.getItem('notes_blocks');
-
-            if (savedTasks) {
-                tasks = JSON.parse(savedTasks);
-            } else {
-                tasks = [{ id: 't0', type: 'todo', text: '', checked: false }];
-            }
-
-            if (savedNotes) {
-                notes = JSON.parse(savedNotes);
-            } else {
-                notes = [{ id: 'n0', type: 'bullet', text: '' }];
-            }
-
-            render();
-        }
-
-        // CLEAR ALL BLOCKS
-        function clearAllBlocks() {
-            if (confirm('Clear all tasks and notes? This will be archived.')) {
-                if (tasks.some(b => b.text.trim()) || notes.some(b => b.text.trim())) {
-                    const today = new Date().toISOString().split('T')[0];
-                    saveToHistory(today, 'tasks', tasks);
-                    saveToHistory(today, 'notes', notes);
-                    syncToGoogleSheets('Tasks & Notes Editor', {
-                        action: 'clear_all',
-                        tasks: tasks,
-                        notes: notes,
-                        clearedDate: today
-                    });
-                }
-                tasks = [{ id: 't0', type: 'todo', text: '', checked: false }];
-                notes = [{ id: 'n0', type: 'bullet', text: '' }];
-                focusedBlockId = 't0';
-                render();
-            }
-        }
-
-        // ========== DAILY JOURNAL (SIMPLE TEXT) ==========
-        let journalAutoSaveTimer;
-
-        function autoSaveJournal() {
-            clearTimeout(journalAutoSaveTimer);
-            journalAutoSaveTimer = setTimeout(() => {
-                saveJournal();
-            }, 1000);
-        }
-
-        function saveJournal() {
-            const today = new Date().toISOString().split('T')[0];
-            const content = document.getElementById('journalEditor').textContent;
-            const journalData = {
-                date: today,
-                content: content,
-                timestamp: new Date().toISOString()
-            };
-            localStorage.setItem('journal_' + today, JSON.stringify(journalData));
-            // Save to history as well
-            if (content.trim()) {
-                saveToHistory(today, 'journal', content);
-            }
-            syncToGoogleSheets('Daily Journal', journalData);
-        }
-
-        function loadJournal() {
-            const today = new Date().toISOString().split('T')[0];
-            const saved = localStorage.getItem('journal_' + today);
-            if (saved) {
-                const data = JSON.parse(saved);
-                document.getElementById('journalEditor').textContent = data.content || '';
-            }
-        }
-
-        function clearJournal() {
-            if (confirm('Clear journal entry? This will be archived.')) {
-                const content = document.getElementById('journalEditor').textContent;
-                const today = new Date().toISOString().split('T')[0];
-                if (content.trim()) {
-                    saveToHistory(today, 'journal', content);
-                    syncToGoogleSheets('Daily Journal', {
-                        action: 'clear',
-                        content: content,
-                        clearedDate: today
-                    });
-                }
-                document.getElementById('journalEditor').textContent = '';
-                saveJournal();
-            }
-        }
-
-        // ========== QUICK INSIGHTS NOTES ==========
-        let notesAutoSaveTimer;
-
-        function autoSaveNotes() {
-            clearTimeout(notesAutoSaveTimer);
-            notesAutoSaveTimer = setTimeout(() => {
-                saveQuickNotes();
-            }, 1000);
-        }
-
-        function saveQuickNotes() {
-            const today = new Date().toISOString().split('T')[0];
-            const notesData = {
-                date: today,
-                importantPoints: document.getElementById('importantPoints').textContent,
-                observationsPatterns: document.getElementById('observationsPatterns').textContent,
-                freeNotes: document.getElementById('freeNotes').textContent,
-                timestamp: new Date().toISOString()
-            };
-            localStorage.setItem('quickNotes_' + today, JSON.stringify(notesData));
-            // Save to history as well
-            saveToHistory(today, 'learnings', notesData.importantPoints);
-            saveToHistory(today, 'patterns', notesData.observationsPatterns);
-            saveToHistory(today, 'actions', notesData.freeNotes);
-            syncToGoogleSheets('Quick Insights Notes', notesData);
-        }
-
-        function loadQuickNotes() {
-            const today = new Date().toISOString().split('T')[0];
-            const saved = localStorage.getItem('quickNotes_' + today);
-            if (saved) {
-                const data = JSON.parse(saved);
-                document.getElementById('importantPoints').textContent = data.importantPoints || '';
-                document.getElementById('observationsPatterns').textContent = data.observationsPatterns || '';
-                document.getElementById('freeNotes').textContent = data.freeNotes || '';
-            }
-        }
-
-        // ========== HISTORY MANAGEMENT ==========
-        function saveToHistory(dateStr, dataType, data) {
-            let history = JSON.parse(localStorage.getItem('dashboard_history') || '{}');
-            if (!history[dateStr]) {
-                history[dateStr] = {};
-            }
-            history[dateStr][dataType] = data;
-            localStorage.setItem('dashboard_history', JSON.stringify(history));
-        }
-
-        function loadHistoryForDate(dateStr) {
-            let history = JSON.parse(localStorage.getItem('dashboard_history') || '{}');
-            return history[dateStr] || {};
-        }
-
-        function hasHistoryForDate(dateStr) {
-            const history = loadHistoryForDate(dateStr);
-            return Object.keys(history).length > 0;
-        }
-
-        function openHistoryModal(dateStr) {
-            const history = loadHistoryForDate(dateStr);
-            const modal = document.getElementById('historyModal');
-            const dateTitle = document.getElementById('historyModalDate');
-            const body = document.getElementById('historyModalBody');
-
-            // Format date nicely
-            const date = new Date(dateStr + 'T00:00:00');
-            const formattedDate = date.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-            dateTitle.textContent = formattedDate;
-
-            let htmlContent = '';
-
-            if (Object.keys(history).length === 0) {
-                htmlContent = '<div class="history-empty">No data recorded for this day</div>';
-            } else {
-                // Tasks
-                if (history.tasks && history.tasks.length > 0) {
-                    htmlContent += '<div class="history-section">';
-                    htmlContent += '<div class="history-section-title">📋 Tasks</div>';
-                    htmlContent += '<div class="history-section-content">';
-                    history.tasks.forEach(task => {
-                        if (task.text.trim()) {
-                            htmlContent += `${task.checked ? '✓ ' : '○ '} ${escapeHtml(task.text)}\n`;
-                        }
-                    });
-                    htmlContent += '</div></div>';
-                }
-
-                // Notes
-                if (history.notes && history.notes.length > 0) {
-                    htmlContent += '<div class="history-section">';
-                    htmlContent += '<div class="history-section-title">📝 Notes</div>';
-                    htmlContent += '<div class="history-section-content">';
-                    history.notes.forEach(note => {
-                        if (note.text.trim()) {
-                            htmlContent += `– ${escapeHtml(note.text)}\n`;
-                        }
-                    });
-                    htmlContent += '</div></div>';
-                }
-
-                // Learnings
-                if (history.learnings && history.learnings.trim()) {
-                    htmlContent += '<div class="history-section">';
-                    htmlContent += '<div class="history-section-title">📚 Today\'s Learnings</div>';
-                    htmlContent += `<div class="history-section-content">${escapeHtml(history.learnings)}</div>`;
-                    htmlContent += '</div>';
-                }
-
-                // Patterns
-                if (history.patterns && history.patterns.trim()) {
-                    htmlContent += '<div class="history-section">';
-                    htmlContent += '<div class="history-section-title">🔍 Patterns & Winning Tactics</div>';
-                    htmlContent += `<div class="history-section-content">${escapeHtml(history.patterns)}</div>`;
-                    htmlContent += '</div>';
-                }
-
-                // Actions
-                if (history.actions && history.actions.trim()) {
-                    htmlContent += '<div class="history-section">';
-                    htmlContent += '<div class="history-section-title">✅ Action Items & Growth Areas</div>';
-                    htmlContent += `<div class="history-section-content">${escapeHtml(history.actions)}</div>`;
-                    htmlContent += '</div>';
-                }
-
-                // Journal
-                if (history.journal && history.journal.trim()) {
-                    htmlContent += '<div class="history-section">';
-                    htmlContent += '<div class="history-section-title">📔 Daily Journal</div>';
-                    htmlContent += `<div class="history-section-content">${escapeHtml(history.journal)}</div>`;
-                    htmlContent += '</div>';
-                }
-            }
-
-            body.innerHTML = htmlContent;
-            modal.classList.add('open');
-        }
-
-        function closeHistoryModal() {
-            document.getElementById('historyModal').classList.remove('open');
-        }
-
-        // Close modal when clicking outside
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('historyModal').addEventListener('click', (e) => {
-                if (e.target.id === 'historyModal') {
-                    closeHistoryModal();
-                }
-            });
-        });
-
         // ========== DAILY COMMAND CENTER ==========
 
         let currentCalendarDate = new Date();
 
-        // Chilean Holidays 2026
-        const chileanHolidays = {
-            '2026-05-01': 'Día del Trabajo',
-            '2026-05-21': 'Glorias Navales',
-            '2026-06-21': 'Pueblos Indígenas',
-            '2026-06-29': 'San Pedro y San Pablo',
-            '2026-07-16': 'Virgen del Carmen',
-            '2026-08-15': 'Asunción de la Virgen',
-            '2026-09-18': 'Independencia',
-            '2026-09-19': 'Glorias del Ejército',
-            '2026-10-12': 'Encuentro de Dos Mundos',
-            '2026-10-31': 'Iglesias Evangélicas',
-            '2026-11-01': 'Día de Todos los Santos',
-            '2026-12-08': 'Inmaculada Concepción',
-            '2026-12-25': 'Navidad'
-        };
+        // Add Task
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const taskText = input.value.trim();
+            if (!taskText) return;
 
-        // Render Calendar (Monday-first)
+            let tasks = JSON.parse(localStorage.getItem('daily_tasks') || '[]');
+            tasks.push({
+                id: Date.now(),
+                text: taskText,
+                completed: false,
+                createdDate: new Date().toISOString().split('T')[0],
+                completedDate: null
+            });
+            localStorage.setItem('daily_tasks', JSON.stringify(tasks));
+            input.value = '';
+            renderTasks();
+            syncToGoogleSheets('Daily Tasks', { action: 'add', task: taskText });
+        }
+
+        // Delete Task
+        function deleteTask(id) {
+            let tasks = JSON.parse(localStorage.getItem('daily_tasks') || '[]');
+            tasks = tasks.filter(t => t.id !== id);
+            localStorage.setItem('daily_tasks', JSON.stringify(tasks));
+            renderTasks();
+        }
+
+        // Toggle Task
+        function toggleTask(id) {
+            let tasks = JSON.parse(localStorage.getItem('daily_tasks') || '[]');
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                if (task.completed) {
+                    task.completedDate = new Date().toISOString().split('T')[0];
+                }
+                localStorage.setItem('daily_tasks', JSON.stringify(tasks));
+                renderTasks();
+                if (task.completed) {
+                    syncToGoogleSheets('Daily Tasks', { action: 'completed', task: task.text, completedDate: task.completedDate });
+                }
+            }
+        }
+
+        // Render Tasks
+        function renderTasks() {
+            let tasks = JSON.parse(localStorage.getItem('daily_tasks') || '[]');
+            const today = new Date().toISOString().split('T')[0];
+
+            // Filter out strikethrough tasks from yesterday (auto-clear at midnight)
+            tasks = tasks.filter(t => {
+                if (t.completed && t.completedDate && t.completedDate !== today) {
+                    // This is an old strikethrough task from yesterday, remove it
+                    return false;
+                }
+                return true;
+            });
+            localStorage.setItem('daily_tasks', JSON.stringify(tasks));
+
+            const tasksList = document.getElementById('tasksList');
+            if (tasks.length === 0) {
+                tasksList.innerHTML = '<div class="empty-message">No tasks yet. Add one to get started!</div>';
+                return;
+            }
+
+            tasksList.innerHTML = tasks.map(task => `
+                <div class="task-item">
+                    <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask(${task.id})">
+                    <span class="task-text">${task.text}</span>
+                    <button class="task-delete" onclick="deleteTask(${task.id})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        // Add Note
+        function addNote() {
+            const input = document.getElementById('noteInput');
+            const noteText = input.value.trim();
+            if (!noteText) return;
+
+            let notes = JSON.parse(localStorage.getItem('daily_notes') || '[]');
+            notes.push({
+                id: Date.now(),
+                text: noteText,
+                createdDate: new Date().toISOString().split('T')[0]
+            });
+            localStorage.setItem('daily_notes', JSON.stringify(notes));
+            input.value = '';
+            renderNotes();
+            syncToGoogleSheets('Daily Notes', { action: 'add', note: noteText });
+        }
+
+        // Clear All Notes
+        function clearNotes() {
+            if (confirm('Clear all notes for today? (They will be archived)')) {
+                let notes = JSON.parse(localStorage.getItem('daily_notes') || '[]');
+                const today = new Date().toISOString().split('T')[0];
+                const archivedNotes = notes.map(n => ({ ...n, clearedDate: today }));
+
+                localStorage.setItem('daily_notes', '[]');
+                renderNotes();
+
+                // Sync to Google Sheets
+                syncToGoogleSheets('Daily Notes', {
+                    action: 'clear_all',
+                    notesCount: notes.length,
+                    clearedDate: today,
+                    notes: archivedNotes
+                });
+            }
+        }
+
+        // Render Notes
+        function renderNotes() {
+            let notes = JSON.parse(localStorage.getItem('daily_notes') || '[]');
+            const notesList = document.getElementById('notesList');
+
+            if (notes.length === 0) {
+                notesList.innerHTML = '<div class="empty-message">No notes yet. Add one to get started!</div>';
+                return;
+            }
+
+            notesList.innerHTML = notes.map(note => `
+                <div class="note-item">${note.text}</div>
+            `).join('');
+        }
+
+        // Render Calendar
         function renderCalendar() {
             const year = currentCalendarDate.getFullYear();
             const month = currentCalendarDate.getMonth();
@@ -1774,18 +1242,15 @@
             document.getElementById('calendarMonth').textContent =
                 currentCalendarDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
-            // Get first day of month (0=Sun, 1=Mon, ..., 6=Sat) and number of days
-            const firstDayOfWeek = new Date(year, month, 1).getDay();
-            // Adjust to Monday-first: (0=Sun→6, 1=Mon→0, 2=Tue→1, etc.)
-            const adjustedFirstDay = (firstDayOfWeek === 0) ? 6 : (firstDayOfWeek - 1);
-
+            // Get first day of month and number of days
+            const firstDay = new Date(year, month, 1).getDay();
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             const daysInPrevMonth = new Date(year, month, 0).getDate();
 
             let days = [];
 
             // Previous month's days
-            for (let i = adjustedFirstDay - 1; i >= 0; i--) {
+            for (let i = firstDay - 1; i >= 0; i--) {
                 days.push({ day: daysInPrevMonth - i, otherMonth: true });
             }
 
@@ -1794,7 +1259,7 @@
                 days.push({ day: i, otherMonth: false });
             }
 
-            // Next month's days (fill to 42 total = 6 rows × 7 days)
+            // Next month's days
             const remaining = 42 - days.length;
             for (let i = 1; i <= remaining; i++) {
                 days.push({ day: i, otherMonth: true });
@@ -1806,29 +1271,13 @@
 
             const calendarDays = document.getElementById('calendarDays');
             calendarDays.innerHTML = days.map((d, idx) => {
-                const dateStr = !d.otherMonth ?
-                    `${year}-${String(month + 1).padStart(2, '0')}-${String(d.day).padStart(2, '0')}` : '';
-
                 const isToday = !d.otherMonth && d.day === today.getDate() &&
                                month === today.getMonth() && year === today.getFullYear();
                 const hasActivity = !d.otherMonth && (tasks.length > 0 || notes.length > 0);
-                const isHoliday = dateStr in chileanHolidays;
-                const holidayName = chileanHolidays[dateStr] || '';
-
-                // Weekend detection (5=Sat, 6=Sun in Monday-first layout)
-                const isWeekend = (idx % 7 === 5 || idx % 7 === 6) && !d.otherMonth;
-
-                let dayContent = `${d.day}`;
-                if (isHoliday && holidayName) {
-                    dayContent += `<div class="holiday-label">${holidayName}</div>`;
-                }
-
-                const hasHistory = !d.otherMonth && hasHistoryForDate(dateStr);
-                const clickHandler = hasHistory ? `onclick="openHistoryModal('${dateStr}')"` : '';
 
                 return `
-                    <div class="calendar-day ${d.otherMonth ? 'other-month' : ''} ${isToday ? 'today' : ''} ${hasActivity && !d.otherMonth ? 'has-activity' : ''} ${isHoliday ? 'holiday' : ''} ${isWeekend ? 'weekend' : ''} ${hasHistory ? 'has-history' : ''}" title="${holidayName}" ${clickHandler} style="${hasHistory ? 'cursor: pointer;' : ''}">
-                        ${dayContent}
+                    <div class="calendar-day ${d.otherMonth ? 'other-month' : ''} ${isToday ? 'today' : ''} ${hasActivity && !d.otherMonth ? 'has-activity' : ''}">
+                        ${d.day}
                     </div>
                 `;
             }).join('');
@@ -1853,14 +1302,34 @@
         window.addEventListener('load', () => {
             updateTime();
             loadStats();
-            loadState();
-            loadJournal();
-            loadQuickNotes();
+            renderTasks();
+            renderNotes();
             renderCalendar();
+
+            // Auto-clear strikethrough tasks at midnight
+            setInterval(() => {
+                renderTasks();
+            }, 60000); // Check every minute
 
             setInterval(updateTime, 1000);
             setInterval(loadStats, 5000);
         });
+
+        // Handle Enter key in task input
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.target.id === 'taskInput') {
+                addTask();
+            }
+        });
+
+        
+        // ========== STARTUP ==========
+        // Initialize Firebase sync when page loads
+        window.addEventListener('load', () => {
+            setTimeout(initFirebaseSync, 500);
+            console.log('ACKTIB Dashboard loaded with Firebase sync');
+        });
+
     </script>
 </body>
 </html>
